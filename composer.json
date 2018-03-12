@@ -1,0 +1,26 @@
+{
+    "name": "we-develop-coffee/w-power",
+    "description": "Add extra power to your WHMCS addon, registrar, gateway or server module.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Koop",
+            "email": "daniel@yourwebhoster.eu"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "WeDevelopCoffee\\wPower\\": "src"
+        },
+        "files": ["src/helpers.php"]
+    },
+    "require": {
+        "illuminate/pagination": "5.3.*",
+        "doctrine/inflector": "1.1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6",
+        "smarty/smarty": "3.1.29"
+    }
+}
