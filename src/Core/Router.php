@@ -32,7 +32,7 @@ class Router {
      *
      * @var array
      */
-    protected $params;
+    protected $params = [];
 
     /**
      * The module instance
@@ -77,19 +77,33 @@ class Router {
         $url = $_SERVER['REQUEST_URI'];
 
         $parse_url = parse_url($url);
-        parse_str($parse_url['query'], $query_items);
         
-        
-        foreach($query_items as $key => $value)
+        if(isset($parse_url['query']))
         {
-            if($key != 'module')
-                unset($query_items[$key]);
+            parse_str($parse_url['query'], $query_items);
+
+            foreach($query_items as $key => $value)
+            {
+                if($key != 'module')
+                    unset($query_items[$key]);
+            }
+            
+            if(is_array($query_items))
+                $query_items = array_merge($query_items, $this->params);
+            else
+                $query_items = $this->params;
         }
+        else
+            $query_items = $this->params;
         
-        $query_items = array_merge($query_items, $this->params);
+        
+        
         $query_items['action'] = $this->route;
 
-        $url =  $_SERVER['DOCUMENT_URI'] .'?'.http_build_query($query_items);
+        if(!empty($query_items))
+            $url = $_SERVER['DOCUMENT_URI'] .'?'.http_build_query($query_items);
+        else
+            $url = $_SERVER['DOCUMENT_URI'];
 
         return $url;
     }
@@ -100,10 +114,8 @@ class Router {
      * @return string $url
      */
     public function getAdminURL()
-    {
+    {   
         $url = $this->getBaseURL() . $GLOBALS['whmcs']->get_admin_folder_name() . '/' . $this->adminRoute;
-        
-        $url =  $_SERVER['DOCUMENT_URI'] .'?'.http_build_query($this->params);
 
         return $url;
     }
@@ -140,38 +152,38 @@ class Router {
     *
     * @return string
     */
-    public function getCurrentURL ( array $removeParam )
+    public function getCurrentURL ( array $removeParam = [])
     {
         if($this->core->isCli())
             return false;
 
         $url = $_SERVER['REQUEST_URI'];
-
-        $parse_url = parse_url($url);
-        parse_str($parse_url['query'], $original_query_items);
-        
         $query_items = [];
 
-        foreach($original_query_items as $key => $value)
+        $parse_url = parse_url($url);
+        if(isset($parse_url['query']))
         {
-            $key = str_replace('amp;', '', $key);
-            $query_items [ $key ] = $value;
-        }
-
-        if(!empty($removeParam))
-        {
-            foreach($removeParam as $param)
+            parse_str($parse_url['query'], $original_query_items);
+        
+            foreach($original_query_items as $key => $value)
             {
-                if(isset($query_items[$param]))
-                    unset($query_items[$param]);
-                // elseif ( isset($query_items[ 'amp;'.$param]))
-                //     unset($query_items[ 'amp;'.$param]);
+                $key = str_replace('amp;', '', $key);
+                $query_items [ $key ] = $value;
+            }
+
+            if(!empty($removeParam))
+            {
+                foreach($removeParam as $param)
+                {
+                    if(isset($query_items[$param]))
+                        unset($query_items[$param]);
+                }
             }
         }
-        
+
         $url_path =  $_SERVER['DOCUMENT_URI'] .'?'.http_build_query($query_items);
         
-        return  $this->getBaseURL() . $url_path;
+        return $url_path;
     }
 
 
@@ -182,8 +194,8 @@ class Router {
      */
     protected function loadRoutes()
     {
-        $level = $this->core->getLevel();
-        $path = $this->path->getAddonPath() . 'routes/' . $level . '.php';
+        $level  = $this->core->getLevel();
+        $path   = $this->path->getAddonPath() . 'routes/' . $level . '.php';
 
         // Include the routes.
         $this->routes = include( $path);

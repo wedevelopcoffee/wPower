@@ -1,6 +1,5 @@
 <?php
 namespace Tests;
-use PHPUnit\Framework\TestCase;
 use WeDevelopCoffee\wPower\wPower;
 use WeDevelopCoffee\wPower\Core\Core;
 use WeDevelopCoffee\wPower\Core\Path;

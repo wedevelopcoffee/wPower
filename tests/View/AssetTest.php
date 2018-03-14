@@ -1,66 +1,101 @@
 <?php
-namespace Tests;
-use PHPUnit\Framework\TestCase;
-use WeDevelopCoffee\wPower\wPower;
-use WeDevelopCoffee\wPower\Core\Core;
-use WeDevelopCoffee\wPower\Core\Path;
+namespace Tests\View;
+use Mockery;
+use Tests\TestCase;
 use WeDevelopCoffee\wPower\Core\Router;
-use WeDevelopCoffee\wPower\Module\Module;
-use WeDevelopCoffee\wPower\View\View;
+use WeDevelopCoffee\wPower\View\Asset;
 
 class AssetTest extends TestCase
 {
-    /**
-     * The wPower instance
-     *
-     * @var instance
-     */
-    protected $wPower;
-
-    public function test_create_core_instance()
+    protected $asset;
+    
+    public function test_asset_css ()
     {
-        $core = $this->wPower->Core();
+        $this->prep_addonURL();
+        $url             = 'https://domain.com/resources/assets/css/file.css';
+        $params['css']   = 'file.css';
         
-        $this->assertInstanceOf(Core::class, $core);
+        // Tag
+        $result          = $this->asset->asset($params);
+        $expectedResult  = '<link rel="stylesheet" href="'.$url.'" type="text/css">';
+        
+        $this->assertEquals($result, $expectedResult);
+        
+        // Tag with extra params
+        $params['rel']   = 'stylesheet';
+        $result          = $this->asset->getCssTag($params);
+        $expectedResult  = '<link rel="stylesheet" href="'.$url.'" type="text/css" rel="stylesheet">';
+        $this->assertEquals($result, $expectedResult);
+        
+        // URL
+        $result          = $this->asset->assetURL($params);
+        $expectedResult  = $url;
+        
+        $this->assertEquals($result, $expectedResult);
     }
-
-    public function test_create_module_instance()
+    
+    public function test_asset_js ()
     {
-        $module = $this->wPower->Module();
-
-        $this->assertInstanceOf(Module::class, $module);
+        $this->prep_addonURL();
+        $url             = 'https://domain.com/resources/assets/js/file.js';
+        $params['js']    = 'file.js';
+        
+        // Tag
+        $result          = $this->asset->asset($params);
+        $expectedResult  = '<script src="'.$url.'"></script>';
+        
+        $this->assertEquals($result, $expectedResult);
+        
+        // Tag with extra params
+        $params['async'] = 'async';
+        $result          = $this->asset->getJsTag($params);
+        $expectedResult  = '<script src="'.$url.'" async="async"></script>';
+        $this->assertEquals($result, $expectedResult);
+        
+        // URL
+        $result          = $this->asset->assetURL($params);
+        $expectedResult  = $url;
+        
+        $this->assertEquals($result, $expectedResult);
     }
-
-    public function test_create_path_instance()
+    
+    public function test_asset_jpg ()
     {
-        $path = $this->wPower->Path();
-
-        $this->assertInstanceOf(Path::class, $path);
+        $this->prep_addonURL();
+        $url             = 'https://domain.com/resources/assets/img/file.jpg';
+        $params['img']   = 'file.jpg';
+        
+        // Tag
+        $result          = $this->asset->asset($params);
+        $expectedResult  = '<img src="'.$url.'">';
+        
+        $this->assertEquals($result, $expectedResult);
+        
+        // Tag with extra params
+        $params['alt']   = 'ALT_TEXT';
+        $result          = $this->asset->getImgTag($params);
+        $expectedResult  = '<img src="'.$url.'" alt="ALT_TEXT">';
+        $this->assertEquals($result, $expectedResult);
+        
+        // URL
+        $result          = $this->asset->assetURL($params);
+        $expectedResult  = $url;
+        
+        $this->assertEquals($result, $expectedResult);
     }
-
-    public function test_create_router_instance()
+    
+    /**
+    * prep_addonURL
+    * 
+    * @return 
+    */
+    public function prep_addonURL ()
     {
-        $router = $this->wPower->Router();
-
-        $this->assertInstanceOf(Router::class, $router);
+        $this->mockedRouter->shouldReceive('getAddonURL')
+        ->times(3)
+        ->andReturn('https://domain.com/');
     }
-
-    public function test_create_view_instance()
-    {
-        $view = $this->wPower->View();
-
-        $this->assertInstanceOf(View::class, $view);
-    }
-
-    public function test_launch_class()
-    {
-        $class = Core::class;
-
-        $core = $this->wPower->launch($class);
-
-        $this->assertInstanceOf($class, $core);
-    }
-
+    
     /**
     * setUp
     * 
@@ -68,6 +103,8 @@ class AssetTest extends TestCase
     */
     public function setUp ()
     {
-        $this->wPower = new wPower();
+        $this->mockedRouter = Mockery::mock(Router::class);
+        $this->asset = new Asset($this->mockedRouter);
     }
+    
 }

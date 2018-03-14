@@ -16,8 +16,6 @@ class Launcher
     */
     public function launchClass ($class)
     {
-        
-            
         if($class == 'WeDevelopCoffee\wPower\wPower' && isset($GLOBALS['wPower']))
         {
             // Exists!
@@ -73,6 +71,5 @@ class Launcher
             $GLOBALS['wPower'] = $instance;
         
         return $instance;
-        
     }
 }

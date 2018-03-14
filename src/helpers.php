@@ -60,5 +60,6 @@ if (! function_exists('wView')) {
 /**
  * Launch the system
  */
-wPower()->Bootstrap();
+if (!class_exists('PHPUnit\Framework\TestCase')) 
+    wPower()->Bootstrap();
 

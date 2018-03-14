@@ -60,19 +60,24 @@ class Module {
      */
     public function checkAddon()
     {
-        // Determine based on the hooks. This should always happen first.
-        // @todo
-        if($this->name = $this->getModuleName('addons'))
+        if($this->getModuleName('addons'))
             $this->type = 'addon';
-        
-        return false;
     }
 
-    public function checkGateway() {}
+    public function checkGateway() {
+        if($this->getModuleName('gateways'))
+            $this->type = 'gateway';
+    }
 
-    public function checkRegistrar() {}
+    public function checkRegistrar() {
+        if($this->getModuleName('registrars'))
+            $this->type = 'registrar';
+    }
 
-    public function checkServer() {}
+    public function checkServer() {
+        if($this->getModuleName('servers'))
+            $this->type = 'server';
+    }
 
     
 
@@ -85,7 +90,7 @@ class Module {
     protected function getModuleName($type)
     {
         $backtrace = debug_backtrace();
-
+        
         // Loop through every backtrace
         foreach($backtrace as $trace)
         {
@@ -95,11 +100,15 @@ class Module {
             // Only module files are allowed.
             && strpos($trace['file'], 'modules') == true)
             {
-                // dd('/\/modules\/'.$type.'\/([a-zA-Z0-9-_]+)\//');
                 $expression = '/\/modules\/'.$type.'\/([a-zA-Z0-9-_]+)\//';
                 preg_match($expression, $trace['file'], $matches);
-            
-                return $matches [1];
+                
+                if(isset($matches[1]))
+                {
+                    $this->name = $matches [1];
+                    return true;
+                }
+                    
             }
         }
 
