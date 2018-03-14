@@ -65,7 +65,7 @@ class View
     */
     public function render ()
     {
-        $smarty = $this->smarty;
+        $smarty = clone $this->smarty;
         $smarty->registerPlugin('function', 'get_route', [$this, 'getRoute']);
         $smarty->registerPlugin('function', 'get_admin_route', [$this, 'getAdminRoute']);
         $smarty->registerPlugin('function', 'get_current_url', [$this->router, 'getCurrentURL']);

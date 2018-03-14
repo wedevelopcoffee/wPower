@@ -10,9 +10,15 @@ We have included models for most tables which are based on the Eloquent model or
 
 Furthermore, migrations are a breeze. 
 
-
 # How to use it
 Clone the template and run `composer install` to include the extra packages. To make creating tests a bit easier, the package is designed to use automatic Dependency Injection. You are not required to use the same method (and it is a simple implementation) but it can help you with writing your tests better.
+
+# Database
+To migrate tables, use the `WeDevelopCoffee\wPower\Core\Activate->enableFeature($feature);` command when activating an module. This adds the tables to be migrated for the specific feature.
+
+To add your own migrations, add the following in your activation code: `WeDevelopCoffee\wPower\Core\Activate->addMigrationPath($migrationPath);`. 
+
+To migrate the tables, include the following in your activation code: `WeDevelopCoffee\wPower\Core\Activate->migrate();` The enableFeature function or addMigrationPath method can be used separately, but require both the migrate method to be ran in order to be effective.
 
 # Routing
 ## Admin pages
