@@ -34,7 +34,7 @@ class Activate
     * 
     * @return void
     */
-    public function enableFeature ($features)
+    public function enableFeature ($feature)
     {
         if($feature == 'handles')
             $this->addFeatureMigrationPath('Handles');
@@ -61,7 +61,21 @@ class Activate
     */
     public function Migrate ()
     {
-        return $this->migrator->run($this->migrationPaths);
+        // Check if the repository exists.
+        if(!$this->migrator->repositoryExists())
+        {
+            // Let's create the repository.
+            $repository = $this->migrator->getRepository();
+            $repository->createRepository();
+        }
+
+        if(!empty($this->migrationPaths))
+        {
+            foreach($this->migrationPaths as $path)
+            {
+                $this->migrator->run($path);
+            }
+        }
     }
 
     /**

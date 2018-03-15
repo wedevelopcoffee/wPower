@@ -6,8 +6,9 @@ use ReflectionClass;
 class Launcher
 {
     protected $map = [
-        '\Illuminate\Database\Migrations\MigrationRepositoryInterface' => \Illuminate\Database\Migrations\DatabaseMigrationRepository::class,
-        '\Illuminate\Database\ConnectionResolverInterface' => \Illuminate\Database\Connection::class
+        '\Illuminate\Database\Migrations\MigrationRepositoryInterface' => 'launchMigrationRepository',
+        '\Illuminate\Database\ConnectionResolverInterface' => \WHMCS\Database\Capsule::class,
+        '\Illuminate\Database\Connection' => \WHMCS\Database\Capsule::class
     ];
 
 
@@ -27,8 +28,12 @@ class Launcher
             // Exists!
             return $GLOBALS['wPower'];
         }
-
+        
         $class = $this->mapClass($class);
+
+        // If the class does not exist, it is a local method.
+        if(method_exists($this, $class))
+            return $this->$class();
 
         $reflect = new ReflectionClass($class);
         
@@ -80,6 +85,16 @@ class Launcher
             $GLOBALS['wPower'] = $instance;
         
         return $instance;
+    }
+
+    protected function launchMigrationRepository()
+    {
+        $resolver   = $this->launchClass(\Illuminate\Database\Connection::class);
+        $table      = 'wMigrations';
+        
+        $object = new \Illuminate\Database\Migrations\DatabaseMigrationRepository($resolver, $table);
+
+        return $object;
     }
 
     /**

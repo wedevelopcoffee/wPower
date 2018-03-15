@@ -20,6 +20,16 @@ To add your own migrations, add the following in your activation code: `WeDevelo
 
 To migrate the tables, include the following in your activation code: `WeDevelopCoffee\wPower\Core\Activate->migrate();` The enableFeature function or addMigrationPath method can be used separately, but require both the migrate method to be ran in order to be effective.
 
+***NOTE*** Always lead the table and migration file name after the numbers with your unique addon name.
+Example:
+_wrong_ `2014_10_12_100000_create_password_resets_table`
+_correct_ `2014_10_12_100000_wedevelopcoffee_wpower_create_password_resets_table`
+
+_wrong_ tbldomainplugin
+_correct_ tbl_wdc_domains
+
+Note: wdc stands for WeDevelopCoffee
+
 # Routing
 ## Admin pages
 If the module is designed to be a addon, you can define routes in routes/admin.php and assign the appropiate controller and function. If no function is defined, the system will default to the index function.
