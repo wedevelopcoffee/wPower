@@ -5,6 +5,12 @@ use ReflectionClass;
 
 class Launcher
 {
+    protected $map = [
+        '\Illuminate\Database\Migrations\MigrationRepositoryInterface' => \Illuminate\Database\Migrations\DatabaseMigrationRepository::class,
+        '\Illuminate\Database\ConnectionResolverInterface' => \Illuminate\Database\Connection::class
+    ];
+
+
     /**
     *  Launch a class
     * 
@@ -21,6 +27,9 @@ class Launcher
             // Exists!
             return $GLOBALS['wPower'];
         }
+
+        $class = $this->mapClass($class);
+
         $reflect = new ReflectionClass($class);
         
         try
@@ -71,5 +80,21 @@ class Launcher
             $GLOBALS['wPower'] = $instance;
         
         return $instance;
+    }
+
+    /**
+    * Convert interface/class to a mapped class
+    * 
+    * @return string $class
+    */
+    protected function mapClass ($class)
+    {
+        if(isset($this->map[$class]))
+            return $this->map[$class];
+        
+        if(isset($this->map['\\'.$class]))
+            return $this->map['\\'.$class];
+        
+        return $class;
     }
 }

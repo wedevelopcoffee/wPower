@@ -21,8 +21,8 @@
         }
     },
     "require": {
-        "illuminate/pagination": "5.3.*",
-        "illuminate/filesystem": "5.3.*",
+        "illuminate/pagination": "5.2.*",
+        "illuminate/filesystem": "5.2.*",
         "doctrine/inflector": "1.1.*"
     },
     "require-dev": {

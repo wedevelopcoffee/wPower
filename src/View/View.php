@@ -78,22 +78,14 @@ class View
         
         return $smarty->display( $views_path . $this->view . '.tpl');
     }
-    
+
     /**
     * setupPagination
     * 
     * @return 
     */
     public function setupPagination ()
-    {
-        Paginator::viewFactoryResolver(function () {
-            return new PaginationViewFactory();
-        });
-        
-        Paginator::currentPathResolver(function () {
-            return wPower()->Router()->getCurrentURL(['page']);
-        });
-        
+    {   
         // Pagination fix.
         Paginator::currentPageResolver(function ($pageName = 'page') {
             $page = $_REQUEST[($pageName)];
@@ -107,7 +99,6 @@ class View
         
     }
     
-    // Move getRoute, getAdminRoute and getCurrentURL to a different file.
     /**
     * getRoute
     * $params
