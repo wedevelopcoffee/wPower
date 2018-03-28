@@ -195,7 +195,7 @@ class Router {
     protected function loadRoutes()
     {
         $level  = $this->core->getLevel();
-        $path   = $this->path->getAddonPath() . 'routes/' . $level . '.php';
+        $path   = $this->path->getModulePath() . 'routes/' . $level . '.php';
 
         // Include the routes.
         $this->routes = include( $path);

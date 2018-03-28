@@ -128,7 +128,7 @@ class RouterTest extends TestCase
             ->once()
             ->andReturn('admin');
         
-        $this->mockedPath->shouldReceive('getAddonPath')
+        $this->mockedPath->shouldReceive('getModulePath')
             ->once()
             ->andReturn($routePath);
         

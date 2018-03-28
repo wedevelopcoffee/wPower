@@ -22,13 +22,6 @@ class Module {
     protected $name;
 
     /**
-     * The Core
-     *
-     * @var object
-     */
-    protected $core;
-
-    /**
      * The Path
      *
      * @var object
@@ -38,12 +31,8 @@ class Module {
     /**
      * Run the checks
      */
-    public function __construct(Core $core)
+    public function __construct()
     {
-        $this->core = $core;
-
-        $this->cli = $core->isCli();
-
         $this->checkAddon();
             
         $this->checkGateway();
@@ -78,8 +67,6 @@ class Module {
         if($this->getModuleName('servers'))
             $this->type = 'server';
     }
-
-    
 
     /**
      * Backtraces the code execution to find the module name

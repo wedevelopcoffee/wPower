@@ -44,11 +44,7 @@ class ModuleTest extends TestCase
     * @return 
     */
     public function do_checkmodule_test ($type, $expectedModuleName)
-    {
-        $this->mockedCore->shouldReceive('isCli')
-            ->once()
-            ->andReturn(false);
-        
+    {   
         $exampleDebugBacktrace[]    = ['file' => 'ignore'];
         $exampleDebugBacktrace[]    = ['file' => '/home/user/domains/domain.com/private_html/modules/'.$type.'/'.$expectedModuleName.'/'.$expectedModuleName.'.php'];
 

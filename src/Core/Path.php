@@ -69,4 +69,16 @@ class Path
         $addon = $this->module->getName();
         return $this->getDocRoot() . '/modules/addons/' . $addon . '/';
     }
+
+    /**
+     * Get the path to the current addon
+     *
+     * @return void
+     */
+    public function getModulePath()
+    {
+        $name   = $this->module->getName();
+        $type   = $this->module->getType().'s';
+        return $this->getDocRoot() . '/modules/'.$type.'/' . $name . '/';
+    }
 }
