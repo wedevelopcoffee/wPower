@@ -83,7 +83,10 @@ class Module {
         {
             if(isset($trace['file'])
             // Ignore wPower files
-            && strpos($trace['file'], 'wPower/src') === false
+            && strpos($trace['file'], 'wpower/src') === false
+            // Ignore the Composer autoloader
+            && strpos($trace['file'], 'composer/autoload_real') === false
+            && strpos($trace['file'], 'vendor/autoload') === false
             // Only module files are allowed.
             && strpos($trace['file'], 'modules') == true)
             {

@@ -104,6 +104,9 @@ class Handle extends Model {
     */
     public function saveWithDomain ($domainId, $type = 'all')
     {
+        if($type == null)
+            $type = 'all';
+        
         // Prevent that the same is created twice.
         if(!$existingHandle = $this->findExisting())
             $this->save();
