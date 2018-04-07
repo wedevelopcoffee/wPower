@@ -1,6 +1,7 @@
 <?php
 namespace WeDevelopCoffee\wPower\Models;
 
+use \Exception;
 use WHMCS\Database\Capsule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
@@ -118,7 +119,37 @@ class Handle extends Model {
         
         $domain = Domain::find($domainId);
 
-        if($type == 'all')
+        if($type != 'all')
+        {
+            try {
+                $sync[] = $this->generateSync('registrant', $domain);                
+            } catch ( \Exception $e)
+            {
+                $sync[]= ['handle_id' => $this->id, 'type' => 'registrant'];
+            }
+
+            try {
+                $sync[] = $this->generateSync('billing', $domain);                
+            } catch ( \Exception $e)
+            {
+                $sync[]= ['handle_id' => $this->id, 'type' => 'billing'];
+            }
+
+            try {
+                $sync[] = $this->generateSync('admin', $domain);                
+            } catch ( \Exception $e)
+            {
+                $sync[]= ['handle_id' => $this->id, 'type' => 'admin'];
+            }
+
+            try {
+                $sync[] = $this->generateSync('tech', $domain);                
+            } catch ( \Exception $e)
+            {
+                $sync[]= ['handle_id' => $this->id, 'type' => 'tech'];
+            }
+        }
+        else
         {
             // The type is all, so we configure the handle for everything.
 
@@ -126,13 +157,6 @@ class Handle extends Model {
             $sync[]= ['handle_id' => $this->id, 'type' => 'billing'];
             $sync[]= ['handle_id' => $this->id, 'type' => 'admin'];
             $sync[]= ['handle_id' => $this->id, 'type' => 'tech'];
-        }
-        else
-        {
-            $sync[] = $this->generateSync('registrant', $domain);
-            $sync[] = $this->generateSync('billing', $domain);
-            $sync[] = $this->generateSync('admin', $domain);
-            $sync[] = $this->generateSync('tech', $domain);
         }
  
         $domain->handles()->sync($sync);
@@ -162,10 +186,9 @@ class Handle extends Model {
                 
             } catch ( ModelNotFoundException $e)
             {
-                throw Exception('Handle not found');
+                throw new Exception('Handle not found');
             }
         }
-        
 
         $sync = ['handle_id' => $handleId, 'type' => $type];
 
