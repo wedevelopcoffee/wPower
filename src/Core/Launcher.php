@@ -1,14 +1,16 @@
 <?php
 namespace WeDevelopCoffee\wPower\Core;
 
+use WHMCS\Database\Capsule;
 use ReflectionClass;
+use WeDevelopCoffee\wPower\Database\Connection;
+use Illuminate\Database\ConnectionResolver;
 
 class Launcher
 {
     protected $map = [
         '\Illuminate\Database\Migrations\MigrationRepositoryInterface' => 'launchMigrationRepository',
-        '\Illuminate\Database\ConnectionResolverInterface' => \WHMCS\Database\Capsule::class,
-        '\Illuminate\Database\Connection' => \WHMCS\Database\Capsule::class
+        '\Illuminate\Database\ConnectionResolverInterface' => \Illuminate\Database\ConnectionResolver::class,
     ];
 
 
@@ -89,11 +91,13 @@ class Launcher
 
     protected function launchMigrationRepository()
     {
-        $resolver   = $this->launchClass(\Illuminate\Database\Connection::class);
+        $connection = Capsule::connection();
+        $resolver   = new ConnectionResolver([ null => $connection]);
+        
         $table      = 'wMigrations';
         
         $object = new \Illuminate\Database\Migrations\DatabaseMigrationRepository($resolver, $table);
-
+        
         return $object;
     }
 
