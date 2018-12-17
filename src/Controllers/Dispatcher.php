@@ -66,6 +66,11 @@ class Dispatcher
         $this->module = $module;
     }
 
+    public function returnTrue()
+    {
+        return true;
+    }
+
     /**
      * Dispatch request.
      *
@@ -78,7 +83,6 @@ class Dispatcher
     {
         if($action == '')
             $action = 'index';
-
 
         $this->action = $action;
 

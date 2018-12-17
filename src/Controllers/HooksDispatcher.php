@@ -20,7 +20,7 @@ class HooksDispatcher extends Dispatcher {
      *
      * @return string
      */
-    public function dispatch()
+    public function launch()
     {   
         foreach($this->routes as $key => $route)
         {
@@ -31,7 +31,7 @@ class HooksDispatcher extends Dispatcher {
 
             $controller = $this->getController($controllerNameAndFunction['controller']);
             $function   = $controllerNameAndFunction['function'];
-            
+
             add_hook($route['hookPoint'], $route['priority'], [$controller, $function]);
         }
     }

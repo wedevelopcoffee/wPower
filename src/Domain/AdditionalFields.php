@@ -59,7 +59,7 @@ class AdditionalFields
     }
     
     /**
-    * Get the additional fields of the distibution
+    * Get the additional fields of the distribution
     * 
     * @return void
     */
@@ -84,7 +84,7 @@ class AdditionalFields
 
         // Loop through the fields and compile a finished additional fields set.
         $additionalField = [];
-        
+
         foreach($this->registrarAdditionalFields as $tld => $fields)
         {
             $tmpRegistrarFields = [];
@@ -128,22 +128,11 @@ class AdditionalFields
     }
 
     /**
-    * 
-    * 
-    * @return 
-    */
-    public function getAdditionalFieldsForDomain ($domain, $tld)
-    {
-        
-        return ;
-    }
-
-    /**
     * Set the additional fields provided by the provider.
     * 
     * @return $this
     */
-    public function setAdditionalFields ($additionalFields)
+    public function setRegistrarAdditionalFields ($additionalFields)
     {
         $this->registrarAdditionalFields = $additionalFields;
         
