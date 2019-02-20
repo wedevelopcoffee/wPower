@@ -6,6 +6,7 @@ use WeDevelopCoffee\wPower\Controllers\Dispatcher;
 use WeDevelopCoffee\wPower\Core\Core;
 use WeDevelopCoffee\wPower\Core\Router;
 use WeDevelopCoffee\wPower\Module\Module;
+use WeDevelopCoffee\wPower\wPower;
 
 class Base extends TestCase
 {
@@ -13,6 +14,7 @@ class Base extends TestCase
     protected $dispatcherClass = Dispatcher::class;
 
     protected $dispatcher;
+    protected $mockedWPower;
     protected $mockedCore;
     protected $mockedRouter;
     protected $mockedModule;
@@ -34,13 +36,16 @@ class Base extends TestCase
         //Test\dependencies\Controllers;
         // Set globals
         $GLOBALS['wAutoloader'][$this->moduleType][$this->moduleName]['namespace'] = $this->moduleNamespace;
-        
+
+        // Mock wPower
+        $this->mockedWPower   = Mockery::mock(wPower::class);
+
+
         // Mock the core
         $this->mockedCore   = Mockery::mock(Core::class);
         $this->mockedCore->shouldReceive('setLevel')
             ->with($this->level)
             ->once();
-
 
         // Mock the router
         $this->mockedRouter = Mockery::mock(Router::class);
@@ -52,7 +57,7 @@ class Base extends TestCase
         $this->mockedModule = Mockery::mock(Module::class);
 
         $dispatcher = (string) $this->dispatcherClass;
-        $this->dispatcher = new $dispatcher($this->mockedCore, $this->mockedRouter, $this->mockedModule);
+        $this->dispatcher = new $dispatcher($this->mockedWPower, $this->mockedCore, $this->mockedRouter, $this->mockedModule);
     }
 
 

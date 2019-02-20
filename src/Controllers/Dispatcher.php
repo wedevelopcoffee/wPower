@@ -3,6 +3,7 @@ namespace WeDevelopCoffee\wPower\Controllers;
 use WeDevelopCoffee\wPower\Core\Core;
 use WeDevelopCoffee\wPower\Core\Router;
 use WeDevelopCoffee\wPower\Module\Module;
+use WeDevelopCoffee\wPower\wPower;
 
 
 /**
@@ -12,7 +13,7 @@ class Dispatcher
 {
     /**
      * All the routers
-     * 
+     *
      * @param array
      */
     protected $routes;
@@ -23,7 +24,7 @@ class Dispatcher
      * @var object
      */
     protected $router;
-    
+
     /**
      * The requested action.
      *
@@ -51,11 +52,15 @@ class Dispatcher
      * @var object
      */
     protected $module;
+    /**
+     * @var wPower
+     */
+    private $wPower;
 
     /**
      * Constructor
      */
-    public function __construct(Core $core, Router $router, Module $module)
+    public function __construct(wPower $wPower, Core $core, Router $router, Module $module)
     {
         $this->core = $core;
         $this->core->setLevel($this->level);
@@ -64,6 +69,7 @@ class Dispatcher
         $this->routes = $router->getRoutes();
 
         $this->module = $module;
+        $this->wPower = $wPower;
     }
 
     public function returnTrue()
@@ -79,7 +85,7 @@ class Dispatcher
      *
      * @return string
      */
-    public function dispatch($action, $parameters)
+    public function dispatch($action, $params)
     {
         if($action == '')
             $action = 'index';
@@ -90,10 +96,14 @@ class Dispatcher
 
         $controller = $this->getController($controllerNameAndFunction['controller']);
 
-        $launch_controller = new $controller();
+        $launch_controller = $this->wPower->launch($controller);
 
         $functionName = (string) $controllerNameAndFunction['function'];
-        return $launch_controller->$functionName();
+
+        if(!empty($params))
+            return $launch_controller->$functionName($params);
+        else
+            return $launch_controller->$functionName();
     }
 
     /**
@@ -104,9 +114,9 @@ class Dispatcher
     protected function getController($controller)
     {
         $regex = '/([a-zA-Z0-9_]*)$/A';
-        
+
         preg_match($regex, $controller, $matches);
-        
+
         // Print the entire match result
         if(!isset($matches[0]) || $matches[0] == '')
         {
@@ -134,7 +144,7 @@ class Dispatcher
         {
             throw new \Exception ('NOT FOUND');
         }
-            
+
 
         if($this->level == 'hooks')
             $rawController = $rawController['controller'];

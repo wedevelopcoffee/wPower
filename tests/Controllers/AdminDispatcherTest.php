@@ -38,6 +38,11 @@ class AdminDispatcherTest extends Base
             ->once()
             ->andReturn($this->moduleName);
 
+        $this->mockedWPower->shouldReceive('launch')
+            ->with('\Tests\dependencies\Controllers\Admin\AdminController')
+            ->andReturn( new \Tests\dependencies\Controllers\Admin\AdminController())
+            ->once();
+
         $result = $this->dispatcher->dispatch($action, []);
 
         $this->assertEquals('successSomePage', $result);
@@ -53,6 +58,11 @@ class AdminDispatcherTest extends Base
         $this->mockedModule->shouldReceive('getName')
             ->once()
             ->andReturn($this->moduleName);
+
+        $this->mockedWPower->shouldReceive('launch')
+            ->with('\Tests\dependencies\Controllers\Admin\AdminController')
+            ->andReturn( new \Tests\dependencies\Controllers\Admin\AdminController())
+            ->once();
 
         $result = $this->dispatcher->dispatch($action, []);
 
