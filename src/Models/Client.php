@@ -2,13 +2,13 @@
 
 namespace WeDevelopCoffee\wPower\Models;
 
-use WHMCS\Domain\Domain as BaseDomain;
+use WHMCS\User\Client as BaseClient;
 
 /**
- * Class Domain
+ * Class Client
  * @package WeDevelopCoffee\wPower\Models
  */
-class Domain extends BaseDomain
+class Client extends BaseClient
 {
 
 }

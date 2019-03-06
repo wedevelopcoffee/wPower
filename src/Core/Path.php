@@ -1,7 +1,11 @@
 <?php
-namespace WeDevelopCoffee\wPower\Core;
-use WeDevelopCoffee\wPower\Module\Module;
 
+namespace WeDevelopCoffee\wPower\Core;
+
+/**
+ * Class Path
+ * @package WeDevelopCoffee\wPower\Core
+ */
 class Path
 {
     /**
@@ -12,28 +16,20 @@ class Path
     protected $core;
 
     /**
-     * Module
-     *
-     * @var instance
+     * __construct
+     * @param object $core
      */
-    protected $module;
-
-    /**
-    * __construct
-    * @param object $core   
-    */
-    public function __construct (Core $core, Module $module)
-    {  
+    public function __construct (Core $core)
+    {
         $this->core = $core;
-        $this->module = $module;
     }
 
 
     /**
-    * getPath
-    * 
-    * @return string
-    */
+     * getPath
+     *
+     * @return string
+     */
     public function getDocRoot ()
     {
         global $customadminpath;
@@ -70,9 +66,9 @@ class Path
      *
      * @return void
      */
-    public function getAddonPath()
+    public function getAddonMigrationPath()
     {
-        $addon = $this->module->getName();
+        $addon = $this->core->getModuleName();
         return $this->getDocRoot() . '/modules/addons/' . $addon . '/';
     }
 
@@ -83,8 +79,18 @@ class Path
      */
     public function getModulePath()
     {
-        $name   = $this->module->getName();
-        $type   = $this->module->getType().'s';
+        $name   = $this->core->getModuleName();
+        $type   = $this->core->getModuleType().'s';
         return $this->getDocRoot() . '/modules/'.$type.'/' . $name . '/';
+    }
+
+    /**
+     * Get the path to the migration path.
+     *
+     * @return void
+     */
+    public function getModuleMigrationPath()
+    {
+        return $this->getModulePath() . 'migrations/';
     }
 }

@@ -2,13 +2,13 @@
 
 namespace WeDevelopCoffee\wPower\Models;
 
-use WHMCS\Domain\Domain as BaseDomain;
+use WHMCS\User\Client\Contact as BaseContact;
 
 /**
- * Class Domain
+ * Class Contact
  * @package WeDevelopCoffee\wPower\Models
  */
-class Domain extends BaseDomain
+class Contact extends BaseContact
 {
 
 }

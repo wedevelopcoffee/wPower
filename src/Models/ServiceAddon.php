@@ -2,13 +2,13 @@
 
 namespace WeDevelopCoffee\wPower\Models;
 
-use WHMCS\Domain\Domain as BaseDomain;
+use WHMCS\Service\Addon;
 
 /**
- * Class Domain
+ * Class ServiceAddon
  * @package WeDevelopCoffee\wPower\Models
  */
-class Domain extends BaseDomain
+class ServiceAddon extends Addon
 {
 
 }

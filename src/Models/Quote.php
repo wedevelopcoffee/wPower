@@ -2,13 +2,13 @@
 
 namespace WeDevelopCoffee\wPower\Models;
 
-use WHMCS\Domain\Domain as BaseDomain;
+use WHMCS\Billing\Quote as BaseQuote;
 
 /**
- * Class Domain
+ * Class Quote
  * @package WeDevelopCoffee\wPower\Models
  */
-class Domain extends BaseDomain
+class Quote extends BaseQuote
 {
 
 }

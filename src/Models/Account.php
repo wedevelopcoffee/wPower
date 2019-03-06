@@ -2,13 +2,13 @@
 
 namespace WeDevelopCoffee\wPower\Models;
 
-use WHMCS\Domain\Domain as BaseDomain;
+use WHMCS\Billing\Payment\Transaction;
 
 /**
- * Class Domain
+ * Class Accounts
  * @package WeDevelopCoffee\wPower\Models
  */
-class Domain extends BaseDomain
+class Account extends Transaction
 {
 
 }

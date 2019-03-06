@@ -2,13 +2,13 @@
 
 namespace WeDevelopCoffee\wPower\Models;
 
-use WHMCS\Domain\Domain as BaseDomain;
+use WHMCS\Billing\Invoice as BaseInvoice;
 
 /**
- * Class Domain
+ * Class Invoice
  * @package WeDevelopCoffee\wPower\Models
  */
-class Domain extends BaseDomain
+class Invoice extends BaseInvoice
 {
 
 }

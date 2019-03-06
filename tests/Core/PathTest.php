@@ -1,11 +1,16 @@
 <?php
-namespace Tests\Core;
+
+namespace WeDevelopCoffee\wPower\Tests\Core;
+
 use Mockery;
-use Tests\TestCase;
+use WeDevelopCoffee\wPower\Tests\TestCase;
 use WeDevelopCoffee\wPower\Core\Path;
 use WeDevelopCoffee\wPower\Core\Core;
-use WeDevelopCoffee\wPower\Module\Module;
 
+/**
+ * Class PathTest
+ * @package WeDevelopCoffee\wPower\Tests\Core
+ */
 class PathTest extends TestCase
 {
     protected $path;
@@ -28,35 +33,55 @@ class PathTest extends TestCase
         $this->assertContains('src/Core/modules/addons/', $result);
     }
 
-    public function test_get_addon_path()
+    public function test_get_module_path()
     {
         $moduleName = 'some-module';
 
-        $this->mockedModule->shouldReceive('getName')
+        $this->mockedCore->shouldReceive('getModuleName')
             ->once()
             ->andReturn($moduleName);
-        
-        $result = $this->path->getAddonPath();
+
+        $this->mockedCore->shouldReceive('getModuleType')
+            ->once()
+            ->andReturn('addon');
+
+        $result = $this->path->getModulePath();
 
         // Overriding __DIR__ is tricky, instead we have to rely that this works.
 
         $this->assertContains('src/Core/modules/addons/'.$moduleName.'/' , $result);
     }
-    
+
+    public function test_get_addon_migration_path()
+    {
+        $moduleName = 'some-module';
+
+        $this->mockedCore->shouldReceive('getModuleName')
+            ->once()
+            ->andReturn($moduleName);
+
+        $this->mockedCore->shouldReceive('getModuleType')
+            ->once()
+            ->andReturn('addon');
+
+        $result = $this->path->getModuleMigrationPath();
+
+        $this->assertContains('src/Core/modules/addons/'.$moduleName.'/migrations/' , $result);
+    }
+
     /**
-    * setUp
-    * 
-    */
+     * setUp
+     *
+     */
     public function setUp ()
     {
-        $this->mockedModule = Mockery::mock(Module::class);
         $this->mockedCore = Mockery::mock(Core::class);
-        $this->path   = new Path($this->mockedCore, $this->mockedModule);
+        $this->path   = new Path($this->mockedCore);
 
         $this->mockedCore->shouldReceive('isCli')
             ->once()
             ->andReturn(true);
     }
-    
-    
+
+
 }

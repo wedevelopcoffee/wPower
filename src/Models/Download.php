@@ -2,13 +2,13 @@
 
 namespace WeDevelopCoffee\wPower\Models;
 
-use WHMCS\Domain\Domain as BaseDomain;
+use WHMCS\Download\Download as BaseDownload;
 
 /**
- * Class Domain
+ * Class Download
  * @package WeDevelopCoffee\wPower\Models
  */
-class Domain extends BaseDomain
+class Download extends BaseDownload
 {
 
 }

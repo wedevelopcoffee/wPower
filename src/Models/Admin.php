@@ -2,13 +2,13 @@
 
 namespace WeDevelopCoffee\wPower\Models;
 
-use WHMCS\Domain\Domain as BaseDomain;
+use WHMCS\User\Admin as BaseAdmin;
 
 /**
- * Class Domain
+ * Class Admin
  * @package WeDevelopCoffee\wPower\Models
  */
-class Domain extends BaseDomain
+class Admin extends BaseAdmin
 {
 
 }
