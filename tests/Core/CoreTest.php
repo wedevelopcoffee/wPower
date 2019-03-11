@@ -28,12 +28,8 @@ class CoreTest extends TestCase
             ->setLevel($this->testData['level']);
 
         $this->launch = $core->launch();
-        if(is_object($this->launch))
-            $test = true;
-        else
-            $test = false;
 
-        $this->assertTrue($test);
+        $this->assertIsObject($this->launch);
     }
 
 }
