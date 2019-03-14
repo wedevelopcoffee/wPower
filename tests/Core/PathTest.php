@@ -21,7 +21,7 @@ class PathTest extends TestCase
     {
         $result = $this->path->getDocRoot();
 
-        $this->assertContains('src/Core', $result);
+        $this->assertContains(getcwd(), $result);
     }
 
     public function test_get_addons_path()
@@ -30,7 +30,7 @@ class PathTest extends TestCase
 
         // Overriding __DIR__ is tricky, instead we have to rely that this works.
 
-        $this->assertContains('src/Core/modules/addons/', $result);
+        $this->assertContains('modules/addons/', $result);
     }
 
     public function test_get_module_path()
@@ -49,7 +49,7 @@ class PathTest extends TestCase
 
         // Overriding __DIR__ is tricky, instead we have to rely that this works.
 
-        $this->assertContains('src/Core/modules/addons/'.$moduleName.'/' , $result);
+        $this->assertContains('modules/addons/'.$moduleName.'/' , $result);
     }
 
     public function test_get_addon_migration_path()
@@ -66,7 +66,7 @@ class PathTest extends TestCase
 
         $result = $this->path->getModuleMigrationPath();
 
-        $this->assertContains('src/Core/modules/addons/'.$moduleName.'/migrations/' , $result);
+        $this->assertContains('modules/addons/'.$moduleName.'/migrations/' , $result);
     }
 
     /**

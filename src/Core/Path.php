@@ -38,10 +38,12 @@ class Path
         {
             // DOC_ROOT does not work with cli
             // WARNING: This part of the code is not tested!
-            $currentDir = __DIR__;
-            $currentDirExploded = explode('modules', $currentDir);
+            $currentDir = getcwd();
 
-            return $currentDirExploded[0];
+            if(last(explode('/', $currentDir)) == 'crons')
+                $currentDir = realpath($currentDir . '/../');
+
+            return $currentDir;
         }
 
         $parts = explode(DIRECTORY_SEPARATOR, getcwd());
