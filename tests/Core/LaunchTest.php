@@ -106,7 +106,7 @@ class LaunchTest extends TestCase
             ->andReturn($route)
             ->once();
 
-        $this->mockedInstance->shouldReceive('setClass')
+        $this->mockedInstance->shouldReceive('createInstance')
             ->with($route['class'])
             ->andReturn($expectedReturnData)
             ->once();

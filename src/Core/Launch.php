@@ -88,7 +88,7 @@ class Launch
 
         $route      = $this->router->findRoute($action);
 
-        $this->instance->setClass($route['class']);
+        $this->instance->createInstance($route['class']);
 
         return $this->instance->execute($route['function'], $arguments[0]);
     }
