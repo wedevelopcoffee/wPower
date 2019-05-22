@@ -223,6 +223,7 @@ class Router {
     protected function loadRoutes()
     {
         $level  = $this->core->getLevel();
+
         $path   = $this->path->getModulePath() . 'routes/' . $level . '.php';
 
         // Include the routes.

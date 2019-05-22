@@ -1,6 +1,8 @@
 <?php
 
 namespace WeDevelopCoffee\wPower\Core;
+if(!class_exists(\DI\Container::class))
+    require_once(__DIR__ . '/../../vendor/autoload.php'); // @todo remove this for production.
 
 use DI\Container;
 use Illuminate\Database\ConnectionResolver;

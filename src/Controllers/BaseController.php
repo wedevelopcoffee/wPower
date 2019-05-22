@@ -16,54 +16,14 @@ class BaseController
      * @var Core
      */
     protected $core;
-    /**
-     * @var View
-     */
-    protected $view;
-    /**
-     * @var Validator
-     */
-    protected $validator;
+
 
     /**
-     * @var array $rules The rules.
+     * ViewBaseController constructor.
      */
-    protected $rules;
-
-    /**
-     * BaseController constructor.
-     */
-    public function __construct(Core $core, View $view, Validator $validator)
+    public function __construct(Core $core)
     {
         $this->core = $core;
-        $this->view = $view;
-        $this->validator = $validator;
-
-        $this->validator->setRules($this->rules);
     }
 
-    /**
-     * Validate the input data.
-     */
-    protected function validate()
-    {
-        return !$this->validator->failed();
-    }
-
-    /**
-     * Generate the view.
-     *
-     * @param $view
-     * @param $data
-     * @return mixed
-     */
-    protected function view($view, $data)
-    {
-        $data['errors'] = $this->validator->getFailedRules();
-
-        return $this->view
-            ->setData($data)
-            ->setView($view)
-            ->render();
-    }
 }

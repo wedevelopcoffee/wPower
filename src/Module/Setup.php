@@ -48,6 +48,40 @@ class Setup
     }
 
     /**
+     * Enable the features for database migrations
+     *
+     * @return void
+     */
+    public function enableFeature ($feature)
+    {
+        if($feature == 'handles')
+            $this->addFeatureMigrationPath('Handles');
+
+        return $this;
+    }
+
+    /**
+     * Generate the addon path
+     *
+     */
+    protected function addFeatureMigrationPath ($feature)
+    {
+        $path = realpath(dirname(__FILE__) . '/../' . $feature . '/migrations/');
+        $this->addMigrationPath($path);
+    }
+
+    /**
+     * Add path to the list of migration paths
+     *
+     * @return void
+     */
+    public function addMigrationPath ($path)
+    {
+        $this->migrationPaths[] = $path;
+        return $this;
+    }
+
+    /**
      * Migrate!
      *
      * @return array

@@ -21,7 +21,11 @@ class Registrar extends Model {
      */
     protected $appends = ['decodedValue'];
 
-
+    /**
+     * List all registrars.
+     *
+     * @return mixed
+     */
     public function listRegistrars()
     {
         return self::groupBy('registrar');
@@ -46,6 +50,39 @@ class Registrar extends Model {
     }
 
     /**
+     * Fetch all registrar data for the specific registrar and decode.
+     *
+     * @return array
+     */
+    public function getByKey($registrar, $key)
+    {
+        $data = self::where('registrar', $registrar)
+            ->where('setting', $key)
+            ->first();
+
+        return self::decode($data->value);
+    }
+
+    /**
+     * Get the TLDs
+     *
+     * @param $registrar
+     * @return array
+     */
+    public function getTlds ($registrar)
+    {
+        $result = DomainPricing::where('autoreg', $registrar)->get();
+        if(empty($result))
+            return [];
+        $tlds = [];
+        foreach($result as $tld)
+        {
+            $tlds[$tld->extension] = $tld;
+        }
+        return $tlds;
+    }
+
+    /**
      * Estimate how many domains need a transfer.
      *
      * @return mixed
@@ -55,9 +92,15 @@ class Registrar extends Model {
         return $this->decode($this->value);
     }
 
-    public function decode($data)
+    /**
+     * Decode the retrieved data.
+     *
+     * @param $data
+     * @return mixed
+     */
+    protected function decode($data)
     {
-        return \localAPI('DecryptPassword', ['password2' => $data])['password'];
+        return html_entity_decode(\localAPI('DecryptPassword', ['password2' => $data])['password']);
     }
 
 }
