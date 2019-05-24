@@ -12,26 +12,31 @@ class WpowerCreateHandlesTable extends Migration
      */
     public function up()
     {
-        Capsule::schema()->create('wHandles', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->string('registrar');
-            $table->string('type');
-            $table->string('handle');
-            $table->text('data');
-            $table->timestamps();
-        });
+        if(!Capsule::schema()->hasTable('wHandles'))
+        {
+            Capsule::schema()->create('wHandles', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id')->unsigned();
+                $table->string('registrar');
+                $table->string('type');
+                $table->string('handle');
+                $table->text('data');
+                $table->timestamps();
+            });
+        }
 
-        // For creating 
-        Capsule::schema()->create('wDomain_handle', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('type');
-            $table->integer('domain_id')->unsigned();
-            $table->integer('handle_id')->unsigned();
-            $table->timestamps();
 
-            $table->foreign('handle_id')->references('id')->on('wHandles');
-        });
+        if(!Capsule::schema()->hasTable('wDomain_handle')) {
+            Capsule::schema()->create('wDomain_handle', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('type');
+                $table->integer('domain_id')->unsigned();
+                $table->integer('handle_id')->unsigned();
+                $table->timestamps();
+
+                $table->foreign('handle_id')->references('id')->on('wHandles');
+            });
+        }
     }
 
     /**
@@ -41,7 +46,10 @@ class WpowerCreateHandlesTable extends Migration
      */
     public function down()
     {
-        Capsule::schema()->drop('wHandles');
-        Capsule::schema()->drop('wDomain_handle');
+        if(!Capsule::schema()->hasTable('wHandles'))
+            Capsule::schema()->drop('wHandles');
+
+        if(!Capsule::schema()->hasTable('wDomain_handle'))
+            Capsule::schema()->drop('wDomain_handle');
     }
 }
