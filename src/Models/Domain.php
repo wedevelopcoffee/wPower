@@ -27,7 +27,7 @@ class Domain extends BaseDomain
      * @param int $days
      * @return array
      */
-    public function updateNextDueDateOffset($days = 40, $queryBuilder = null)
+    public function updateNextDueDateOffset($days = 3, $max_difference = 40, $registrar = null, $queryBuilder = null)
     {
         if($queryBuilder == null)
             $queryObject = $this;
@@ -35,12 +35,18 @@ class Domain extends BaseDomain
             $queryObject = $queryBuilder;
 
         // Select the domains with the wrong offset.
+        $domainsQuery = $queryObject->selectRaw('DATE_SUB(`expirydate`, INTERVAL ? DAY) `new_nextduedate`,
+DATEDIFF(DATE_SUB(`expirydate`, INTERVAL ? DAY), `nextduedate`) `new_nextduedate_difference`,
+tbldomains.*', [$days, $days])
+        ->whereRaw('tbldomains.nextduedate !=  DATE_SUB(`expirydate`, INTERVAL ? DAY)', [$days]);
 
-        $domains = $queryObject->selectRaw('@new_nextduedate := DATE_SUB(`expirydate`, INTERVAL ? DAY) `new_nextduedate`, DATEDIFF(@new_nextduedate, `nextduedate`) `new_nextduedate_difference`, tbldomains.*', [$days])
-        ->whereRaw('tbldomains.nextduedate !=  DATE_SUB(`expirydate`, INTERVAL ? DAY)', [$days])
-            ->whereRaw('@new_nextduedate_difference >= ?', [($days * -1)])
-            ->whereRaw('@new_nextduedate_difference <= ?', [$days])
-            ->get();
+        if($registrar != null)
+            $domainsQuery = $domainsQuery->where('registrar', $registrar);
+
+        $domainsQuery = $domainsQuery
+            ->havingRaw('new_nextduedate_difference >= ? and new_nextduedate_difference <= ?', [ ($max_difference*-1), $max_difference]);
+
+        $domains = $domainsQuery->get();
 
         $updated_domains = [];
         

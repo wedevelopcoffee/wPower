@@ -52,15 +52,19 @@ class Registrar extends Model {
     /**
      * Fetch all registrar data for the specific registrar and decode.
      *
-     * @return array
+     * @return array|string
      */
-    public function getByKey($registrar, $key)
+    public function getByKey($registrar, $key, $defaultValue = '')
     {
         $data = self::where('registrar', $registrar)
             ->where('setting', $key)
             ->first();
 
-        return self::decode($data->value);
+        $result = self::decode($data->value);
+        if($result == '')
+            return $defaultValue;
+
+        return $result;
     }
 
     /**
