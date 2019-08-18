@@ -2,6 +2,7 @@
 namespace WeDevelopCoffee\wPower\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Domain model
@@ -61,8 +62,15 @@ class Registrar extends Model {
             ->first();
 
         $result = self::decode($data->value);
+
         if($result == '')
-            return $defaultValue;
+        {
+            // on or off typically reflect a yesno type of field.
+            if($defaultValue == 'on' || $defaultValue == 'off')
+                return 'off';
+            else
+                return $defaultValue;
+        }
 
         return $result;
     }

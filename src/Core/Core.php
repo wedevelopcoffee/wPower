@@ -11,6 +11,7 @@ use WeDevelopCoffee\wPower\Database\DatabaseMigrationRepository;
 use Illuminate\Database\Migrations\MigrationRepositoryInterface;
 use WeDevelopCoffee\wPower\Module\Setup;
 use WHMCS\Database\Capsule;
+use WHMCS\ClientArea;
 
 /**
  * Class Core
@@ -129,6 +130,10 @@ class Core
             return $object;
         });
         $this->launcher->set(ConnectionResolverInterface::class, \DI\get(ConnectionResolver::class));
+
+        $this->launcher->set(ClientArea::class, function(){
+            return new ClientArea();
+        });
     }
 
     /**
