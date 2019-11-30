@@ -38,10 +38,7 @@ class Path
         {
             // DOC_ROOT does not work with cli
             // WARNING: This part of the code is not tested!
-            $currentDir = getcwd();
-
-            if(last(explode('/', $currentDir)) == 'crons')
-                $currentDir = realpath($currentDir . '/../');
+            $currentDir = explode('modules', $full_path)[0];
 
             return $currentDir;
         }
