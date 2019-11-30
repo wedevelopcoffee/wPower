@@ -40,6 +40,14 @@ class Path
             // WARNING: This part of the code is not tested!
             $currentDir = explode('modules', $full_path)[0];
 
+            // If empty, fall back on the old method.
+            if($currentDir == '')
+            {
+                $currentDir = getcwd();
+                if(last(explode('/', $currentDir)) == 'crons')
+                    $currentDir = realpath($currentDir . '/../');
+            }
+
             return $currentDir;
         }
 
