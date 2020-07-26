@@ -8,7 +8,7 @@ use Punic\Exception;
 /**
  * Addon model
  */
-class Addon extends Model {
+class AddonModule extends Model {
     /**
      * The table associated with the model.
      *
@@ -93,7 +93,7 @@ class Addon extends Model {
         } catch ( ModelNotFoundException $e)
         {
             // Create the record.
-            $data = new Addon();
+            $data = new AddonModule();
             $data->module = $module;
             $data->setting = $key;
         }
