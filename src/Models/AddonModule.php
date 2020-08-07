@@ -16,13 +16,6 @@ class AddonModule extends Model {
      */
     protected $table = 'tbladdonmodules';
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ['decodedValue'];
-
     public $timestamps = false;
 
     /**
@@ -47,7 +40,7 @@ class AddonModule extends Model {
         $addonData = [];
         foreach($rawAddonData as $key => $data)
         {
-            $addonData [$data->module] [$data->setting] = $this->decode($data->value);
+            $addonData [$data->module] [$data->setting] = $data->value;
         }
 
         return $addonData;
@@ -64,7 +57,7 @@ class AddonModule extends Model {
             ->where('setting', $key)
             ->first();
 
-        $result = self::decode($data->value);
+        $result = $data->value;
 
         if($result == '')
         {
@@ -85,7 +78,6 @@ class AddonModule extends Model {
      */
     public function updateByKey($module, $key, $value = '')
     {
-        $value = self::encode($value);
         try {
             $data = self::where('module', $module)
                 ->where('setting', $key)
@@ -102,38 +94,6 @@ class AddonModule extends Model {
         $data->save();
 
         return true;
-    }
-
-    /**
-     * Estimate how many domains need a transfer.
-     *
-     * @return mixed
-     */
-    public function getDecodedValueAttribute()
-    {
-        return $this->decode($this->value);
-    }
-
-    /**
-     * Decode the retrieved data.
-     *
-     * @param $data
-     * @return mixed
-     */
-    protected function decode($data)
-    {
-        return html_entity_decode(\localAPI('DecryptPassword', ['password2' => $data])['password']);
-    }
-
-    /**
-     * Decode the retrieved data.
-     *
-     * @param $data
-     * @return mixed
-     */
-    protected function encode($data)
-    {
-        return html_entity_decode(\localAPI('EncryptPassword', ['password2' => $data])['password']);
     }
 
 }
