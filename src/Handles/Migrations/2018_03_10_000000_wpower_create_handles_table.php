@@ -1,7 +1,8 @@
 <?php
-use WHMCS\Database\Capsule;
-use Illuminate\Database\Schema\Blueprint;
+
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use WHMCS\Database\Capsule;
 
 class WpowerCreateHandlesTable extends Migration
 {
@@ -12,8 +13,7 @@ class WpowerCreateHandlesTable extends Migration
      */
     public function up()
     {
-        if(!Capsule::schema()->hasTable('wHandles'))
-        {
+        if (! Capsule::schema()->hasTable('wHandles')) {
             Capsule::schema()->create('wHandles', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('user_id')->unsigned();
@@ -25,8 +25,7 @@ class WpowerCreateHandlesTable extends Migration
             });
         }
 
-
-        if(!Capsule::schema()->hasTable('wDomain_handle')) {
+        if (! Capsule::schema()->hasTable('wDomain_handle')) {
             Capsule::schema()->create('wDomain_handle', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('type');
@@ -38,6 +37,7 @@ class WpowerCreateHandlesTable extends Migration
             });
         }
     }
+
     /**
      * Reverse the migrations.
      *
@@ -45,10 +45,12 @@ class WpowerCreateHandlesTable extends Migration
      */
     public function down()
     {
-        if(!Capsule::schema()->hasTable('wHandles'))
+        if (! Capsule::schema()->hasTable('wHandles')) {
             Capsule::schema()->drop('wHandles');
+        }
 
-        if(!Capsule::schema()->hasTable('wDomain_handle'))
+        if (! Capsule::schema()->hasTable('wDomain_handle')) {
             Capsule::schema()->drop('wDomain_handle');
+        }
     }
 }

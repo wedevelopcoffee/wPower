@@ -1,9 +1,9 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Tests\Module;
-use Illuminate\Database\Migrations\Migrator;
+
 use Mockery;
 use WeDevelopCoffee\wPower\Core\Core;
-use WeDevelopCoffee\wPower\Core\Path;
 use WeDevelopCoffee\wPower\Module\Setup;
 use WeDevelopCoffee\wPower\Security\Csrf;
 use WeDevelopCoffee\wPower\Security\Exceptions\CsrfTokenException;
@@ -11,6 +11,13 @@ use WeDevelopCoffee\wPower\Tests\TestCase;
 
 class CsrfTest extends TestCase
 {
+    /**
+     * @var Mockery\LegacyMockInterface|Mockery\MockInterface|Core|(Core&Mockery\LegacyMockInterface)|(Core&Mockery\MockInterface)
+     */
+    private Mockery\LegacyMockInterface|Core|Mockery\MockInterface $mockedCore;
+
+    private Csrf $csrf;
+
     public function test_generate_code()
     {
         $code = $this->csrf->generateCsrf();
@@ -30,7 +37,7 @@ class CsrfTest extends TestCase
     {
         $code = $this->csrf->generateCsrf();
 
-        $code .= "makethisincorrect";
+        $code .= 'makethisincorrect';
 
         $this->expectException(CsrfTokenException::class);
 
@@ -39,12 +46,10 @@ class CsrfTest extends TestCase
         $this->assertEquals(true, $result);
     }
 
-
     /**
-    * setUp
-    * 
-    */
-    public function setUp ()
+     * setUp
+     */
+    public function setUp(): void
     {
         $this->mockedCore = Mockery::mock(Core::class);
         $this->mockedCore->shouldReceive('isCli')
@@ -52,6 +57,4 @@ class CsrfTest extends TestCase
 
         $this->csrf = new Csrf($this->mockedCore);
     }
-    
-    
 }

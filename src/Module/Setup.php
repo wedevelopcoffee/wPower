@@ -3,12 +3,10 @@
 namespace WeDevelopCoffee\wPower\Module;
 
 use Illuminate\Database\Migrations\Migrator;
-use WeDevelopCoffee\wPower\Core\Core;
 use WeDevelopCoffee\wPower\Core\Path;
 
 /**
  * Class Setup
- * @package WeDevelopCoffee\wPower\Module
  */
 class Setup
 {
@@ -21,6 +19,8 @@ class Setup
      * @var migration paths
      */
     private $migrationPaths;
+
+    private Path $path;
 
     public function __construct(Migrator $migrator, Path $path)
     {
@@ -52,21 +52,21 @@ class Setup
      *
      * @return void
      */
-    public function enableFeature ($feature)
+    public function enableFeature($feature)
     {
-        if($feature == 'handles')
+        if ($feature == 'handles') {
             $this->addFeatureMigrationPath('Handles');
+        }
 
         return $this;
     }
 
     /**
      * Generate the addon path
-     *
      */
-    protected function addFeatureMigrationPath ($feature)
+    protected function addFeatureMigrationPath($feature)
     {
-        $path = realpath(dirname(__FILE__) . '/../' . $feature . '/Migrations/');
+        $path = realpath(dirname(__FILE__).'/../'.$feature.'/Migrations/');
         $this->addMigrationPath($path);
     }
 
@@ -75,9 +75,10 @@ class Setup
      *
      * @return void
      */
-    public function addMigrationPath ($path)
+    public function addMigrationPath($path)
     {
         $this->migrationPaths[] = $path;
+
         return $this;
     }
 
@@ -86,24 +87,20 @@ class Setup
      *
      * @return array
      */
-    public function migrate ($action = 'run')
+    public function migrate($action = 'run')
     {
         // Check if the repository exists.
-        if(!$this->migrator->repositoryExists())
-        {
+        if (! $this->migrator->repositoryExists()) {
             // Let's create the repository.
             $repository = $this->migrator->getRepository();
             $repository->createRepository();
         }
 
-        if(!empty($this->migrationPaths))
-        {
-            foreach($this->migrationPaths as $path)
-            {
-                if($action == 'run')
+        if (! empty($this->migrationPaths)) {
+            foreach ($this->migrationPaths as $path) {
+                if ($action == 'run') {
                     $this->migrator->run($path);
-                elseif($action == 'reset')
-                {
+                } elseif ($action == 'reset') {
                     $files = $this->migrator->getMigrationFiles($path);
                     $this->migrator->requireFiles($path, $files);
                     $this->migrator->reset();
@@ -122,7 +119,7 @@ class Setup
         $migrationPath = $this->path->getModuleMigrationPath();
 
         if (is_dir($migrationPath)) {
-            $this->migrationPaths [] = $migrationPath;
+            $this->migrationPaths[] = $migrationPath;
         }
     }
 }

@@ -6,7 +6,6 @@ use WeDevelopCoffee\wPower\Core\API;
 
 /**
  * Class Email
- * @package WeDevelopCoffee\wPower\Email
  */
 class BaseEmail
 {
@@ -32,7 +31,6 @@ class BaseEmail
 
     /**
      * BaseEmail constructor.
-     * @param API $API
      */
     public function __construct(API $API)
     {
@@ -40,32 +38,35 @@ class BaseEmail
     }
 
     /**
-     * @param string $messageName
+     * @param  string  $messageName
      * @return AdminEmail
      */
     public function setMessageName($messageName)
     {
         $this->messageName = $messageName;
+
         return $this;
     }
 
     /**
-     * @param string $customSubject
+     * @param  string  $customSubject
      * @return AdminEmail
      */
     public function setCustomSubject($customSubject)
     {
         $this->customSubject = $customSubject;
+
         return $this;
     }
 
     /**
-     * @param string $customMessage
+     * @param  string  $customMessage
      * @return AdminEmail
      */
     public function setCustomMessage($customMessage)
     {
         $this->customMessage = $customMessage;
+
         return $this;
     }
 }

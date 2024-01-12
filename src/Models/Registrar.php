@@ -1,14 +1,15 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Punic\Exception;
 
 /**
  * Domain model
  */
-class Registrar extends Model {
+class Registrar extends Model
+{
     /**
      * The table associated with the model.
      *
@@ -45,9 +46,8 @@ class Registrar extends Model {
         $rawRegistrarData = $this->get();
 
         $registrarData = [];
-        foreach($rawRegistrarData as $key => $data)
-        {
-            $registrarData [$data->registrar] [$data->setting] = $this->decode($data->value);
+        foreach ($rawRegistrarData as $key => $data) {
+            $registrarData[$data->registrar][$data->setting] = $this->decode($data->value);
         }
 
         return $registrarData;
@@ -66,13 +66,13 @@ class Registrar extends Model {
 
         $result = self::decode($data->value);
 
-        if($result == '')
-        {
+        if ($result == '') {
             // on or off typically reflect a yesno type of field.
-            if($defaultValue == 'on' || $defaultValue == 'off')
+            if ($defaultValue == 'on' || $defaultValue == 'off') {
                 return 'off';
-            else
+            } else {
                 return $defaultValue;
+            }
         }
 
         return $result;
@@ -90,8 +90,7 @@ class Registrar extends Model {
             $data = self::where('registrar', $registrar)
                 ->where('setting', $key)
                 ->firstOrFail();
-        } catch ( ModelNotFoundException $e)
-        {
+        } catch (ModelNotFoundException $e) {
             // Create the record.
             $data = new Registrar();
             $data->registrar = $registrar;
@@ -107,19 +106,19 @@ class Registrar extends Model {
     /**
      * Get the TLDs
      *
-     * @param $registrar
      * @return array
      */
-    public function getTlds ($registrar)
+    public function getTlds($registrar)
     {
         $result = DomainPricing::where('autoreg', $registrar)->get();
-        if(empty($result))
+        if (empty($result)) {
             return [];
+        }
         $tlds = [];
-        foreach($result as $tld)
-        {
+        foreach ($result as $tld) {
             $tlds[$tld->extension] = $tld;
         }
+
         return $tlds;
     }
 
@@ -136,7 +135,6 @@ class Registrar extends Model {
     /**
      * Decode the retrieved data.
      *
-     * @param $data
      * @return mixed
      */
     protected function decode($data)
@@ -147,12 +145,10 @@ class Registrar extends Model {
     /**
      * Decode the retrieved data.
      *
-     * @param $data
      * @return mixed
      */
     protected function encode($data)
     {
         return html_entity_decode(\localAPI('EncryptPassword', ['password2' => $data])['password']);
     }
-
 }

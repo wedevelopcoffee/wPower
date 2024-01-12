@@ -1,32 +1,37 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Tests\View;
+
 use Mockery;
 use Smarty;
-use WeDevelopCoffee\wPower\Security\Csrf;
-use WeDevelopCoffee\wPower\Tests\TestCase;
 use WeDevelopCoffee\wPower\Core\Path;
 use WeDevelopCoffee\wPower\Core\Router;
+use WeDevelopCoffee\wPower\Security\Csrf;
+use WeDevelopCoffee\wPower\Tests\TestCase;
 use WeDevelopCoffee\wPower\View\Asset;
 use WeDevelopCoffee\wPower\View\View;
 
 class ViewTest extends TestCase
 {
     protected $view;
+
     protected $mockedSmarty;
+
     protected $mockedRouter;
+
     protected $mockedAsset;
+
     protected $mockedPath;
+
     private $mockedCsrf;
 
     /**
-    * test_
-    * 
-    * @return 
-    */
-    public function test_render ()
+     * test_
+     */
+    public function test_render()
     {
-        $addonPath  = '/home/admin/domains/domain.com/private_html/modules/addons/addon/';
-        $expectedViewData   = 'some-data';
+        $addonPath = '/home/admin/domains/domain.com/private_html/modules/addons/addon/';
+        $expectedViewData = 'some-data';
 
         $this->prep_smarty_mock('get_route', 'getRoute');
         $this->prep_smarty_mock('get_admin_route', 'getAdminRoute');
@@ -42,7 +47,7 @@ class ViewTest extends TestCase
         $this->mockedPath->shouldReceive('getModulePath')
             ->andReturn($addonPath)
             ->once();
-        
+
         $this->mockedSmarty->shouldReceive('display')
             ->once()
             ->andReturn($expectedViewData);
@@ -50,13 +55,14 @@ class ViewTest extends TestCase
         $data = $this->view->render();
 
         // We do not expect any data.
-        $this->assertEquals($data,$expectedViewData);
+        $this->assertEquals($data, $expectedViewData);
     }
 
-    protected function prep_smarty_mock ($function, $callbackFunction, $object = null)
+    protected function prep_smarty_mock($function, $callbackFunction, $object = null)
     {
-        if($object == null)
+        if ($object == null) {
             $object = $this->view;
+        }
 
         $this->mockedSmarty->shouldReceive('registerPlugin')
             ->with('function', $function, [$object, $callbackFunction])
@@ -71,28 +77,24 @@ class ViewTest extends TestCase
             ->andReturn($token)
             ->once();
 
-        $expected = '<input type="hidden" name=\'_csrf\' value="' . $token . '">';
+        $expected = '<input type="hidden" name=\'_csrf\' value="'.$token.'">';
 
         $result = $this->view->generateCsrf();
         $this->assertEquals($expected, $result);
 
     }
-    
+
     /**
-    * setUp
-    * 
-    * @return void
-    */
-    public function setUp ()
+     * setUp
+     */
+    public function setUp(): void
     {
         $this->mockedSmarty = Mockery::mock(Smarty::class);
         $this->mockedRouter = Mockery::mock(Router::class);
-        $this->mockedAsset  = Mockery::mock(Asset::class);
-        $this->mockedPath   = Mockery::mock(Path::class);
-        $this->mockedCsrf   = Mockery::mock(Csrf::class);
+        $this->mockedAsset = Mockery::mock(Asset::class);
+        $this->mockedPath = Mockery::mock(Path::class);
+        $this->mockedCsrf = Mockery::mock(Csrf::class);
 
-        $this->view         = new View($this->mockedSmarty, $this->mockedRouter, $this->mockedAsset, $this->mockedPath, $this->mockedCsrf);
+        $this->view = new View($this->mockedSmarty, $this->mockedRouter, $this->mockedAsset, $this->mockedPath, $this->mockedCsrf);
     }
-    
-    
 }

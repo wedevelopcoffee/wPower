@@ -1,46 +1,46 @@
 <?php
 
 namespace WeDevelopCoffee\wPower\Core;
-if(!class_exists(\DI\Container::class))
-    require_once(__DIR__ . '/../../vendor/autoload.php'); // @todo remove this for production.
+
+if (! class_exists(\DI\Container::class)) {
+    require_once __DIR__.'/../../vendor/autoload.php';
+} // @todo remove this for production.
 
 use DI\Container;
 use Illuminate\Database\ConnectionResolverInterface;
-use WeDevelopCoffee\wPower\Database\DatabaseMigrationRepository;
 use Illuminate\Database\Migrations\MigrationRepositoryInterface;
+use WeDevelopCoffee\wPower\Database\DatabaseMigrationRepository;
 use WeDevelopCoffee\wPower\Module\Setup;
-use WHMCS\Database\Capsule;
 use WHMCS\ClientArea;
+use WHMCS\Database\Capsule;
 
 /**
  * Class Core
- * @package WeDevelopCoffee\wPower\Core
  */
 class Core
 {
-
     /**
-     * @var string $namespace The namespace of the module.
+     * @var string The namespace of the module.
      */
     protected $namespace;
 
     /**
-     * @var string $moduleType The module type. Can be addon, server or registrar.
+     * @var string The module type. Can be addon, server or registrar.
      */
     protected $moduleType;
 
     /**
-     * @var string $moduleName The module name (same as the directory name).
+     * @var string The module name (same as the directory name).
      */
     protected $moduleName;
 
     /**
-     * @var string $level The level: admin, client or hook.
+     * @var string The level: admin, client or hook.
      */
     protected $level;
 
     /**
-     * @var object $launcher The Launcher class.
+     * @var object The Launcher class.
      */
     public $launcher;
 
@@ -51,8 +51,7 @@ class Core
      */
     public function launch()
     {
-        if(empty($this->launcher))
-        {
+        if (empty($this->launcher)) {
             $this->launcher = new Container();
             $this->bindClasses();
         }
@@ -68,38 +67,34 @@ class Core
     public function setup()
     {
         $this->launch();
+
         return $this->launcher->get(Setup::class);
     }
-
 
     /**
      * Determine if we are running command line or native.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCli()
     {
-        if ( defined('STDIN') )
-        {
+        if (defined('STDIN')) {
             return true;
         }
 
-        if ( php_sapi_name() === 'cli' )
-        {
+        if (php_sapi_name() === 'cli') {
             return true;
         }
 
-        if ( array_key_exists('SHELL', $_ENV) ) {
+        if (array_key_exists('SHELL', $_ENV)) {
             return true;
         }
 
-        if ( empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0)
-        {
+        if (empty($_SERVER['REMOTE_ADDR']) and ! isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0) {
             return true;
         }
 
-        if ( !array_key_exists('REQUEST_METHOD', $_SERVER) )
-        {
+        if (! array_key_exists('REQUEST_METHOD', $_SERVER)) {
             return true;
         }
 
@@ -129,84 +124,77 @@ class Core
             return $object;
         });
 
-        $this->launcher->set(ConnectionResolverInterface::class,  function () {
+        $this->launcher->set(ConnectionResolverInterface::class, function () {
             $connection = Capsule::connection();
             $resolver = new ConnectionResolver([null => $connection]);
+
             return $resolver;
         });
 
-        $this->launcher->set(ClientArea::class, function(){
+        $this->launcher->set(ClientArea::class, function () {
             return new ClientArea();
         });
     }
 
     /**
-     * @param mixed $namespace
+     * @param  mixed  $namespace
      * @return Core
      */
     public function setNamespace($namespace)
     {
         $this->namespace = $namespace;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getNamespace(): string
     {
         return $this->namespace;
     }
 
     /**
-     * @param mixed $moduleType
+     * @param  mixed  $moduleType
      * @return Core
      */
     public function setModuleType($moduleType)
     {
         $this->moduleType = $moduleType;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getModuleType(): string
     {
         return $this->moduleType;
     }
 
     /**
-     * @param mixed $moduleName
+     * @param  mixed  $moduleName
      * @return Core
      */
     public function setModuleName($moduleName)
     {
         $this->moduleName = $moduleName;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getModuleName(): string
     {
         return $this->moduleName;
     }
 
     /**
-     * @param mixed $level
+     * @param  mixed  $level
      * @return Core
      */
     public function setLevel($level)
     {
         $this->level = $level;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLevel(): string
     {
         return $this->level;

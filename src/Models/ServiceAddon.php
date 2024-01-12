@@ -6,9 +6,7 @@ use WHMCS\Service\Addon;
 
 /**
  * Class ServiceAddon
- * @package WeDevelopCoffee\wPower\Models
  */
 class ServiceAddon extends Addon
 {
-
 }

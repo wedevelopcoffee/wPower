@@ -1,11 +1,8 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Controllers;
 
-use phpDocumentor\Reflection\Types\Boolean;
 use WeDevelopCoffee\wPower\Core\Core;
-use WeDevelopCoffee\wPower\Validator\Validator;
-use WeDevelopCoffee\wPower\View\View;
-
 
 /**
  * Controller dispatcher
@@ -17,7 +14,6 @@ class BaseController
      */
     protected $core;
 
-
     /**
      * ViewBaseController constructor.
      */
@@ -25,5 +21,4 @@ class BaseController
     {
         $this->core = $core;
     }
-
 }

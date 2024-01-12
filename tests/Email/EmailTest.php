@@ -1,5 +1,7 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Tests\Core;
+
 use Mockery;
 use WeDevelopCoffee\wPower\Core\API;
 use WeDevelopCoffee\wPower\Email\Email;
@@ -8,8 +10,8 @@ use WeDevelopCoffee\wPower\Tests\TestCase;
 class EmailTest extends TestCase
 {
     protected $email;
-    protected $mockedAPI;
 
+    protected $mockedAPI;
 
     public function test_send_valid_mail_template()
     {
@@ -23,7 +25,7 @@ class EmailTest extends TestCase
         // Set mocks
         $postData = [
             'id' => $id,
-            'messagename' => $messageName
+            'messagename' => $messageName,
         ];
 
         $this->mockedAPI->shouldReceive('exec')
@@ -52,7 +54,7 @@ class EmailTest extends TestCase
         // Set mocks
         $postData = [
             'id' => $id,
-            'messagename' => $messageName
+            'messagename' => $messageName,
         ];
 
         $this->mockedAPI->shouldReceive('exec')
@@ -60,7 +62,7 @@ class EmailTest extends TestCase
             ->once()
             ->andReturn([
                 'result' => $expectedResult,
-                'message' => $errorMessage
+                'message' => $errorMessage,
             ]);
 
         // Execute
@@ -93,14 +95,14 @@ class EmailTest extends TestCase
             'customtype' => $type,
             'customsubject' => $subject,
             'custommessage' => $message,
-            'customvars' => [$varKey => $varValue]
+            'customvars' => [$varKey => $varValue],
         ];
 
         $this->mockedAPI->shouldReceive('exec')
             ->with('SendEmail', $postData)
             ->once()
             ->andReturn([
-                'result' => 'success'
+                'result' => 'success',
             ]);
 
         // Execute
@@ -114,16 +116,13 @@ class EmailTest extends TestCase
 
         $this->assertEquals($expectedResult, $result);
     }
-   
+
     /**
-    * setUp
-    * 
-    */
-    public function setUp ()
+     * setUp
+     */
+    public function setUp(): void
     {
         $this->mockedAPI = Mockery::mock(API::class);
-        $this->email   = new Email($this->mockedAPI);
+        $this->email = new Email($this->mockedAPI);
     }
-    
-    
 }

@@ -4,7 +4,6 @@ namespace WeDevelopCoffee\wPower\Core;
 
 /**
  * Class Instance
- * @package WeDevelopCoffee\wPower\Core
  */
 class Instance
 {
@@ -21,14 +20,13 @@ class Instance
 
     /**
      * Create the controller.
-     *
-     * @param $class
      */
     public function createInstance($class)
     {
-        $launchClass = $this->core->getNamespace() . '\\Controllers\\' . ucfirst($this->core->getLevel()) . '\\' . $class;
-        if(!class_exists($launchClass))
+        $launchClass = $this->core->getNamespace().'\\Controllers\\'.ucfirst($this->core->getLevel()).'\\'.$class;
+        if (! class_exists($launchClass)) {
             $launchClass = $class;
+        }
 
         $this->instance = $this->core->launcher->get($launchClass);
 
@@ -37,10 +35,6 @@ class Instance
 
     /**
      * Execute the method in the instance.
-     *
-     * @param $method
-     * @param $params
-     * @return
      */
     public function execute($method, $params)
     {

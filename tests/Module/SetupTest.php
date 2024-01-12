@@ -1,5 +1,7 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Tests\Module;
+
 use Illuminate\Database\Migrations\Migrator;
 use Mockery;
 use WeDevelopCoffee\wPower\Core\Path;
@@ -9,17 +11,17 @@ use WeDevelopCoffee\wPower\Tests\TestCase;
 class SetupTest extends TestCase
 {
     protected $setup;
+
     private $mockedMigrator;
+
     private $mockedPath;
 
-
-    public function test_create_repository ()
+    public function test_create_repository()
     {
         // Configuration
-        $path = realpath(dirname(__FILE__) . '/../dependencies/migrations');
+        $path = realpath(dirname(__FILE__).'/../dependencies/migrations');
 
         // Expectation
-
 
         // Mock
         $this->mockedPath->shouldReceive('getModuleMigrationPath')
@@ -42,20 +44,19 @@ class SetupTest extends TestCase
             ->once();
 
         // Execute
-        $result = $this->setup->activate();
+        $this->setup->activate();
 
         // Assert true. We only need to make sure that the mocks are used.
         $this->assertTrue(true);
 
     }
 
-    public function test_create_with_existing_repository ()
+    public function test_create_with_existing_repository()
     {
         // Configuration
-        $path = realpath(dirname(__FILE__) . '/../dependencies/migrations');
+        $path = realpath(dirname(__FILE__).'/../dependencies/migrations');
 
         // Expectation
-
 
         // Mock
         $this->mockedPath->shouldReceive('getModuleMigrationPath')
@@ -71,24 +72,21 @@ class SetupTest extends TestCase
             ->once();
 
         // Execute
-        $result = $this->setup->activate();
+        $this->setup->activate();
 
         // Assert true. We only need to make sure that the mocks are used.
         $this->assertTrue(true);
 
     }
-   
+
     /**
-    * setUp
-    * 
-    */
-    public function setUp ()
+     * setUp
+     */
+    public function setUp(): void
     {
-        $this->mockedMigrator   = Mockery::mock(Migrator::class);
-        $this->mockedPath       = Mockery::mock(Path::class);
-        
+        $this->mockedMigrator = Mockery::mock(Migrator::class);
+        $this->mockedPath = Mockery::mock(Path::class);
+
         $this->setup = new Setup($this->mockedMigrator, $this->mockedPath);
     }
-    
-    
 }

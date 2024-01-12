@@ -1,16 +1,17 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Tests\Core;
+
 use Mockery;
 use WeDevelopCoffee\wPower\Core\API;
 use WeDevelopCoffee\wPower\Email\AdminEmail;
-use WeDevelopCoffee\wPower\Email\Email;
 use WeDevelopCoffee\wPower\Tests\TestCase;
 
 class AdminEmailTest extends TestCase
 {
     protected $adminEmail;
-    protected $mockedAPI;
 
+    protected $mockedAPI;
 
     public function test_send_valid_mail_template()
     {
@@ -23,7 +24,7 @@ class AdminEmailTest extends TestCase
         // Set mocks
         $postData = [
             'mergefields' => [],
-            'messagename' => $messageName
+            'messagename' => $messageName,
         ];
 
         $this->mockedAPI->shouldReceive('exec')
@@ -50,7 +51,7 @@ class AdminEmailTest extends TestCase
         // Set mocks
         $postData = [
             'mergefields' => [],
-            'messagename' => $messageName
+            'messagename' => $messageName,
         ];
 
         $this->mockedAPI->shouldReceive('exec')
@@ -58,7 +59,7 @@ class AdminEmailTest extends TestCase
             ->once()
             ->andReturn([
                 'result' => $expectedResult,
-                'message' => $errorMessage
+                'message' => $errorMessage,
             ]);
 
         // Execute
@@ -87,14 +88,14 @@ class AdminEmailTest extends TestCase
         $postData = [
             'mergefields' => [$varKey => $varValue],
             'customsubject' => $subject,
-            'custommessage' => $message
+            'custommessage' => $message,
         ];
 
         $this->mockedAPI->shouldReceive('exec')
             ->with('SendAdminEmail', $postData)
             ->once()
             ->andReturn([
-                'result' => 'success'
+                'result' => 'success',
             ]);
 
         // Execute
@@ -106,16 +107,13 @@ class AdminEmailTest extends TestCase
 
         $this->assertEquals($expectedResult, $result);
     }
-   
+
     /**
-    * setUp
-    * 
-    */
-    public function setUp ()
+     * setUp
+     */
+    public function setUp(): void
     {
         $this->mockedAPI = Mockery::mock(API::class);
-        $this->adminEmail   = new AdminEmail($this->mockedAPI);
+        $this->adminEmail = new AdminEmail($this->mockedAPI);
     }
-    
-    
 }

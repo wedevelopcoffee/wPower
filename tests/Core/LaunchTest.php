@@ -3,39 +3,42 @@
 namespace WeDevelopCoffee\wPower\Tests\Core;
 
 use Mockery;
+use WeDevelopCoffee\wPower\Core\Core;
 use WeDevelopCoffee\wPower\Core\Hooks;
 use WeDevelopCoffee\wPower\Core\Instance;
 use WeDevelopCoffee\wPower\Core\Launch;
-use WeDevelopCoffee\wPower\Core\Core;
 use WeDevelopCoffee\wPower\Core\Router;
 use WeDevelopCoffee\wPower\Tests\TestCase;
 
 /**
  * Class LaunchTest
- * @package WeDevelopCoffee\wPower\Tests\Launch
  */
 class LaunchTest extends TestCase
 {
     protected $launch;
+
     protected $mockedCore;
+
     protected $mockedRouter;
+
     protected $mockedInstance;
+
     protected $mockedHooks;
 
     public function test_output_without_action()
     {
         // Configuration
-        $action     = 'supportDownload';
-        $function   = 'download';
-        $params     = ['someParam'];
+        $action = 'supportDownload';
+        $function = 'download';
+        $params = ['someParam'];
 
         $routerReturn = [
             'class' => 'SupportController',
-            'function' => $function
+            'function' => $function,
         ];
 
         // Expectations
-        $expectedReturn     = 'some-data';
+        $expectedReturn = 'some-data';
 
         // Prepare mocks
 
@@ -71,9 +74,9 @@ class LaunchTest extends TestCase
             ->once()
             ->andReturn($routes);
 
-        foreach($routes as $key => $route) {
+        foreach ($routes as $key => $route) {
             $this->mockedHooks->shouldReceive('add_hook')
-                ->with($route['hookPoint'], $route['priority'], [$this->launch, 'hook_' . $key])
+                ->with($route['hookPoint'], $route['priority'], [$this->launch, 'hook_'.$key])
                 ->once();
         }
 
@@ -84,17 +87,17 @@ class LaunchTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function test_run_hook ()
+    public function test_run_hook()
     {
         // Configuration
-        $name       = 'some_hook';
-        $arguments  = [
-            'some-argument'
+        $name = 'some_hook';
+        $arguments = [
+            'some-argument',
         ];
 
-        $route      = [
-            'class'     => 'some_class',
-            'function'  => 'some_function'
+        $route = [
+            'class' => 'some_class',
+            'function' => 'some_function',
         ];
 
         // Expectation
@@ -117,7 +120,7 @@ class LaunchTest extends TestCase
             ->once();
 
         // Execute
-        $functionName = 'hook_' . $name;
+        $functionName = 'hook_'.$name;
 
         $result = $this->launch->$functionName($arguments);
 
@@ -125,14 +128,13 @@ class LaunchTest extends TestCase
         $this->assertEquals($expectedReturnData, $result);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockedCore = Mockery::mock(Core::class);
         $this->mockedRouter = Mockery::mock(Router::class);
         $this->mockedInstance = Mockery::mock(Instance::class);
         $this->mockedHooks = Mockery::mock(Hooks::class);
 
-        $this->launch   = new Launch($this->mockedCore, $this->mockedRouter, $this->mockedInstance, $this->mockedHooks);
+        $this->launch = new Launch($this->mockedCore, $this->mockedRouter, $this->mockedInstance, $this->mockedHooks);
     }
-
 }

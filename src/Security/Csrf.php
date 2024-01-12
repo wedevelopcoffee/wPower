@@ -7,11 +7,11 @@ use WeDevelopCoffee\wPower\Security\Exceptions\CsrfTokenException;
 
 /**
  * Class Csrf
- * @package WeDevelopCoffee\wPower\Security
  */
 class Csrf
 {
     private $sessionTokenKey = 'wToken';
+
     /**
      * @var Core
      */
@@ -19,7 +19,7 @@ class Csrf
 
     public function __construct(Core $core)
     {
-        if($core->isCli() == false && (session_id() == '' || !isset($_SESSION))) {
+        if ($core->isCli() == false && (session_id() == '' || ! isset($_SESSION))) {
             // session isn't started
             session_start();
         }
@@ -30,16 +30,14 @@ class Csrf
      * Generate the Csrf token.
      *
      * @return string
+     *
      * @throws \Exception
      */
     public function generateCsrf()
     {
-        if(PHP_MAJOR_VERSION >= 7)
-        {
+        if (PHP_MAJOR_VERSION >= 7) {
             $csrfToken = $this->generateCsrfPhp7();
-        }
-        else
-        {
+        } else {
             $csrfToken = $this->generateCsrfPhp5();
         }
 
@@ -51,7 +49,6 @@ class Csrf
     /**
      * Verify the token. Always clears the token.
      *
-     * @param $inputToken
      * @return bool true on success, false on error.
      */
     public function verifyToken($inputToken)
@@ -60,15 +57,16 @@ class Csrf
 
         $this->clearToken();
 
-        if(hash_equals($sessionToken, $inputToken))
+        if (hash_equals($sessionToken, $inputToken)) {
             return true;
+        }
 
         throw new CsrfTokenException();
     }
 
     /**
      * Generate a CSRF token for PHP5.
-     * 
+     *
      * @return string
      */
     private function generateCsrfPhp5()
@@ -84,6 +82,7 @@ class Csrf
      * Generate a CSRF token in PHP7.
      *
      * @return string
+     *
      * @throws \Exception
      */
     private function generateCsrfPhp7()
