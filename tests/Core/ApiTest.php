@@ -1,12 +1,13 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Tests\Core;
-use WeDevelopCoffee\wPower\Tests\TestCase;
+
 use WeDevelopCoffee\wPower\Core\API;
+use WeDevelopCoffee\wPower\Tests\TestCase;
 
 class ApiTest extends TestCase
 {
     protected $api;
-
 
     public function test_api()
     {
@@ -19,20 +20,17 @@ class ApiTest extends TestCase
         $expectedResult = [
             $command,
             $value,
-            $adminuser
+            $adminuser,
         ];
 
         $this->assertEquals($expectedResult, $result);
     }
-   
+
     /**
-    * setUp
-    * 
-    */
-    public function setUp ()
+     * setUp
+     */
+    public function setUp(): void
     {
-        $this->api   = new API();
+        $this->api = new API();
     }
-    
-    
 }

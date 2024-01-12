@@ -1,4 +1,5 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Core;
 
 use Illuminate\Database\ConnectionResolver as ConnectionResolverBase;

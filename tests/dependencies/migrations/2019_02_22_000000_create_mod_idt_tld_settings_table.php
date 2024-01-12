@@ -1,7 +1,8 @@
 <?php
-use WHMCS\Database\Capsule;
-use Illuminate\Database\Schema\Blueprint;
+
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use WHMCS\Database\Capsule;
 
 class CreateModIdtTldSettingsTable extends Migration
 {

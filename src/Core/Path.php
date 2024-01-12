@@ -4,7 +4,6 @@ namespace WeDevelopCoffee\wPower\Core;
 
 /**
  * Class Path
- * @package WeDevelopCoffee\wPower\Core
  */
 class Path
 {
@@ -17,49 +16,47 @@ class Path
 
     /**
      * __construct
-     * @param object $core
+     *
+     * @param  object  $core
      */
-    public function __construct (Core $core)
+    public function __construct(Core $core)
     {
         $this->core = $core;
     }
-
 
     /**
      * getPath
      *
      * @return string
      */
-    public function getDocRoot ()
+    public function getDocRoot()
     {
         global $customadminpath;
 
-        if(defined('ROOTDIR'))
-        {
+        if (defined('ROOTDIR')) {
             return ROOTDIR;
         }
 
-        if($this->core->isCli())
-        {
+        if ($this->core->isCli()) {
             // DOC_ROOT does not work with cli
             // WARNING: This part of the code is not tested!+
             $full_path = dirname(__FILE__);
             $currentDir = explode('modules', $full_path)[0];
 
             // If empty, fall back on the old method.
-            if($currentDir == '')
-            {
+            if ($currentDir == '') {
                 $currentDir = getcwd();
-                if(last(explode('/', $currentDir)) == 'crons')
-                    $currentDir = realpath($currentDir . '/../');
+                if (last(explode('/', $currentDir)) == 'crons') {
+                    $currentDir = realpath($currentDir.'/../');
+                }
             }
 
             return $currentDir;
         }
 
         $parts = explode(DIRECTORY_SEPARATOR, getcwd());
-        if (last( $parts) == $customadminpath || last( $parts) == 'includes' || last( $parts) == 'crons') {
-            unset($parts[sizeof($parts) - 1]);
+        if (last($parts) == $customadminpath || last($parts) == 'includes' || last($parts) == 'crons') {
+            unset($parts[count($parts) - 1]);
         }
 
         return implode(DIRECTORY_SEPARATOR, $parts);
@@ -72,7 +69,7 @@ class Path
      */
     public function getAddonsPath()
     {
-        return $this->getDocRoot() . '/modules/addons/';
+        return $this->getDocRoot().'/modules/addons/';
     }
 
     /**
@@ -83,7 +80,8 @@ class Path
     public function getAddonMigrationPath()
     {
         $addon = $this->core->getModuleName();
-        return $this->getDocRoot() . '/modules/addons/' . $addon . '/';
+
+        return $this->getDocRoot().'/modules/addons/'.$addon.'/';
     }
 
     /**
@@ -93,9 +91,10 @@ class Path
      */
     public function getModulePath()
     {
-        $name   = $this->core->getModuleName();
-        $type   = $this->core->getModuleType().'s';
-        return $this->getDocRoot() . '/modules/'.$type.'/' . $name . '/';
+        $name = $this->core->getModuleName();
+        $type = $this->core->getModuleType().'s';
+
+        return $this->getDocRoot().'/modules/'.$type.'/'.$name.'/';
     }
 
     /**
@@ -105,6 +104,6 @@ class Path
      */
     public function getModuleMigrationPath()
     {
-        return $this->getModulePath() . 'migrations/';
+        return $this->getModulePath().'migrations/';
     }
 }

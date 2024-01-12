@@ -1,14 +1,15 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Punic\Exception;
 
 /**
  * Addon model
  */
-class AddonModule extends Model {
+class AddonModule extends Model
+{
     /**
      * The table associated with the model.
      *
@@ -38,9 +39,8 @@ class AddonModule extends Model {
         $rawAddonData = $this->get();
 
         $addonData = [];
-        foreach($rawAddonData as $key => $data)
-        {
-            $addonData [$data->module] [$data->setting] = $data->value;
+        foreach ($rawAddonData as $key => $data) {
+            $addonData[$data->module][$data->setting] = $data->value;
         }
 
         return $addonData;
@@ -59,13 +59,13 @@ class AddonModule extends Model {
 
         $result = $data->value;
 
-        if($result == '')
-        {
+        if ($result == '') {
             // on or off typically reflect a yesno type of field.
-            if($defaultValue == 'on' || $defaultValue == 'off')
+            if ($defaultValue == 'on' || $defaultValue == 'off') {
                 return 'off';
-            else
+            } else {
                 return $defaultValue;
+            }
         }
 
         return $result;
@@ -82,8 +82,7 @@ class AddonModule extends Model {
             $data = self::where('module', $module)
                 ->where('setting', $key)
                 ->firstOrFail();
-        } catch ( ModelNotFoundException $e)
-        {
+        } catch (ModelNotFoundException $e) {
             // Create the record.
             $data = new AddonModule();
             $data->module = $module;
@@ -95,5 +94,4 @@ class AddonModule extends Model {
 
         return true;
     }
-
 }

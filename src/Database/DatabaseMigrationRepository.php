@@ -4,13 +4,14 @@ namespace WeDevelopCoffee\wPower\Database;
 
 use Illuminate\Database\Migrations\DatabaseMigrationRepository as BaseDatabaseMigrationRepository;
 use WHMCS\Database\Capsule;
+
 /**
  * Class DatabaseMigrationRepository
- * @package WeDevelopCoffee\wPower\Core
  */
 class DatabaseMigrationRepository extends BaseDatabaseMigrationRepository
 {
     public $type;
+
     public $moduleName;
 
     /**
@@ -21,7 +22,7 @@ class DatabaseMigrationRepository extends BaseDatabaseMigrationRepository
     public function getRan()
     {
         $version = Capsule::table('tblconfiguration')->where('setting', 'Version')->first();
-        $major_version = substr($version->value,0,1);
+        $major_version = substr($version->value, 0, 1);
 
         $query = $this->table()
             ->where('module', $this->moduleName)
@@ -30,8 +31,9 @@ class DatabaseMigrationRepository extends BaseDatabaseMigrationRepository
             ->orderBy('migration', 'asc')
             ->pluck('migration');
 
-        if($major_version == 8)
+        if ($major_version == 8) {
             return $query->all();
+        }
 
         // WHMCS V7 support
         return $query;
@@ -55,7 +57,7 @@ class DatabaseMigrationRepository extends BaseDatabaseMigrationRepository
      * Log that a migration was run.
      *
      * @param  string  $file
-     * @param  int     $batch
+     * @param  int  $batch
      * @return void
      */
     public function log($file, $batch)
@@ -121,5 +123,4 @@ class DatabaseMigrationRepository extends BaseDatabaseMigrationRepository
 
         return $schema->hasTable($this->table);
     }
-
 }

@@ -3,34 +3,35 @@
 namespace WeDevelopCoffee\wPower\Tests\Core;
 
 use Mockery;
-use WeDevelopCoffee\wPower\Tests\TestCase;
-use WeDevelopCoffee\wPower\Core\Path;
 use WeDevelopCoffee\wPower\Core\Core;
+use WeDevelopCoffee\wPower\Core\Path;
+use WeDevelopCoffee\wPower\Tests\TestCase;
 
 /**
  * Class PathTest
- * @package WeDevelopCoffee\wPower\Tests\Core
  */
 class PathTest extends TestCase
 {
     protected $path;
+
     protected $mockedCore;
+
     protected $mockedModule;
 
     public function test_get_doc_root()
     {
         $result = $this->path->getDocRoot();
 
-        $this->assertContains(getcwd(), $result);
+        $this->assertStringContainsString(getcwd(), $result);
     }
 
     public function test_get_addons_path()
     {
         $result = $this->path->getAddonsPath();
 
-        // Overriding __DIR__ is tricky, instead we have to rely that this works.
+        // Overriding __DIR__ is tricky, instead we have to rely on that this works.
 
-        $this->assertContains('modules/addons/', $result);
+        $this->assertStringContainsString('modules/addons/', $result);
     }
 
     public function test_get_module_path()
@@ -47,9 +48,9 @@ class PathTest extends TestCase
 
         $result = $this->path->getModulePath();
 
-        // Overriding __DIR__ is tricky, instead we have to rely that this works.
+        // Overriding __DIR__ is tricky, instead we have to rely on that this works.
 
-        $this->assertContains('modules/addons/'.$moduleName.'/' , $result);
+        $this->assertStringContainsString('modules/addons/'.$moduleName.'/', $result);
     }
 
     public function test_get_addon_migration_path()
@@ -66,22 +67,19 @@ class PathTest extends TestCase
 
         $result = $this->path->getModuleMigrationPath();
 
-        $this->assertContains('modules/addons/'.$moduleName.'/migrations/' , $result);
+        $this->assertStringContainsString('modules/addons/'.$moduleName.'/migrations/', $result);
     }
 
     /**
      * setUp
-     *
      */
-    public function setUp ()
+    public function setUp(): void
     {
         $this->mockedCore = Mockery::mock(Core::class);
-        $this->path   = new Path($this->mockedCore);
+        $this->path = new Path($this->mockedCore);
 
         $this->mockedCore->shouldReceive('isCli')
             ->once()
             ->andReturn(true);
     }
-
-
 }

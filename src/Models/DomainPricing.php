@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class DomainPricing
- * @package WeDevelopCoffee\wPower\Models
  */
 class DomainPricing extends Model
 {

@@ -4,7 +4,6 @@ namespace WeDevelopCoffee\wPower\Core;
 
 /**
  * Class Launch
- * @package WeDevelopCoffee\wPower\Core
  */
 class Launch
 {
@@ -38,16 +37,14 @@ class Launch
 
     /**
      * Return the output for the specific route.
-     *
-     * @param $params
-     * @param $action
      */
     public function output($params, $action = '')
     {
-        if($action == '')
+        if ($action == '') {
             $action = 'index';
+        }
 
-        $route      = $this->router->findRoute($action);
+        $route = $this->router->findRoute($action);
 
         $this->instance->createInstance($route['class']);
 
@@ -61,16 +58,16 @@ class Launch
     {
         $routes = $this->router->getRoutes();
 
-        foreach($routes as $key => $route)
-        {
-            if(!isset($route['priority']))
+        foreach ($routes as $key => $route) {
+            if (! isset($route['priority'])) {
                 $route['priority'] = '1';
+            }
 
             /**
              * Generate a hook. We'll be linking $this as controller and generate a hook name.
              * The __call method will create the required instance to launch the hook.
              */
-            $hookFunctionName = 'hook_' . $key;
+            $hookFunctionName = 'hook_'.$key;
 
             // Add the hook.
             $this->hooks->add_hook($route['hookPoint'], $route['priority'], [$this, $hookFunctionName]);
@@ -79,14 +76,12 @@ class Launch
 
     /**
      * Hooks into the
-     * @param $name
-     * @param $arguments
      */
     public function __call($name, $arguments)
     {
         $action = str_replace('hook_', '', $name);
 
-        $route      = $this->router->findRoute($action);
+        $route = $this->router->findRoute($action);
 
         $this->instance->createInstance($route['class']);
 

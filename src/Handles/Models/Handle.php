@@ -1,18 +1,18 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Handles\Models;
 
-use \Exception;
-use WeDevelopCoffee\wPower\Models\Domain;
-use WHMCS\Database\Capsule;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WeDevelopCoffee\wPower\Handles\Exception\HandleUsedByMultipleDomains;
+use WeDevelopCoffee\wPower\Models\Domain;
 
 /**
  * Handle system
  */
-class Handle extends Model {
-
+class Handle extends Model
+{
     /**
      * The table associated with the model.
      *
@@ -56,17 +56,18 @@ class Handle extends Model {
     /**
      * Check if the handle is used for one handle only.
      *
-     * @param integer $domainId to filter out.
-     * @return boolean true if unique | false if the handle is used by multiple domains.
+     * @param  int  $domainId to filter out.
+     * @return bool true if unique | false if the handle is used by multiple domains.
      */
-    public function isUsedByOtherDomains ($domainId)
+    public function isUsedByOtherDomains($domainId)
     {
         $related_domains = $this->domains()
             ->wherePivot('domain_id', '!=', $domainId)->count();
 
         // Multiple domains are using this handle.
-        if($related_domains == 0)
+        if ($related_domains == 0) {
             return false;
+        }
 
         return true;
     }
@@ -74,12 +75,11 @@ class Handle extends Model {
     /**
      * Find an existing handle
      *
-     * @return object|boolean Array with possible handles or false when nothing.
+     * @return object|bool Array with possible handles or false when nothing.
      */
-    public function findExisting ()
+    public function findExisting()
     {
-        try
-        {
+        try {
             $result = $this->where('data', $this->attributes['data'])
                 ->where('user_id', $this->user_id)
                 ->where('registrar', $this->registrar)
@@ -89,9 +89,7 @@ class Handle extends Model {
                 })
                 ->where('handle', '!=', '')
                 ->firstOrFail();
-        }
-        catch ( ModelNotFoundException $e)
-        {
+        } catch (ModelNotFoundException $e) {
             return false;
         }
 
@@ -103,60 +101,53 @@ class Handle extends Model {
      *
      * @return $this
      */
-    public function saveWithDomain ($domainId, $type = 'all')
+    public function saveWithDomain($domainId, $type = 'all')
     {
-        if($type == null)
+        if ($type == null) {
             $type = 'all';
+        }
 
         // Prevent that the same is created twice.
-        if(!$existingHandle = $this->findExisting())
+        if (! $existingHandle = $this->findExisting()) {
             $this->save();
-        else
-        {
-            $this->id       = $existingHandle->id;
-            $this->exists   = true;
+        } else {
+            $this->id = $existingHandle->id;
+            $this->exists = true;
         }
 
         $domain = Domain::find($domainId);
 
-        if($type != 'all')
-        {
+        if ($type != 'all') {
             try {
                 $sync[] = $this->generateSync('registrant', $domain);
-            } catch ( \Exception $e)
-            {
-                $sync[]= ['handle_id' => $this->id, 'type' => 'registrant'];
+            } catch (\Exception $e) {
+                $sync[] = ['handle_id' => $this->id, 'type' => 'registrant'];
             }
 
             try {
                 $sync[] = $this->generateSync('billing', $domain);
-            } catch ( \Exception $e)
-            {
-                $sync[]= ['handle_id' => $this->id, 'type' => 'billing'];
+            } catch (\Exception $e) {
+                $sync[] = ['handle_id' => $this->id, 'type' => 'billing'];
             }
 
             try {
                 $sync[] = $this->generateSync('admin', $domain);
-            } catch ( \Exception $e)
-            {
-                $sync[]= ['handle_id' => $this->id, 'type' => 'admin'];
+            } catch (\Exception $e) {
+                $sync[] = ['handle_id' => $this->id, 'type' => 'admin'];
             }
 
             try {
                 $sync[] = $this->generateSync('tech', $domain);
-            } catch ( \Exception $e)
-            {
-                $sync[]= ['handle_id' => $this->id, 'type' => 'tech'];
+            } catch (\Exception $e) {
+                $sync[] = ['handle_id' => $this->id, 'type' => 'tech'];
             }
-        }
-        else
-        {
+        } else {
             // The type is all, so we configure the handle for everything.
 
-            $sync[]= ['handle_id' => $this->id, 'type' => 'registrant'];
-            $sync[]= ['handle_id' => $this->id, 'type' => 'billing'];
-            $sync[]= ['handle_id' => $this->id, 'type' => 'admin'];
-            $sync[]= ['handle_id' => $this->id, 'type' => 'tech'];
+            $sync[] = ['handle_id' => $this->id, 'type' => 'registrant'];
+            $sync[] = ['handle_id' => $this->id, 'type' => 'billing'];
+            $sync[] = ['handle_id' => $this->id, 'type' => 'admin'];
+            $sync[] = ['handle_id' => $this->id, 'type' => 'tech'];
         }
 
         $domain->handles()->sync($sync);
@@ -167,25 +158,22 @@ class Handle extends Model {
     /**
      * Generate sync with one change.
      *
-     * @param string $type
-     * @param object $model \WeDevelopCoffee\wPower\Models\Domain
+     * @param  string  $type
+     * @param  object  $model \WeDevelopCoffee\wPower\Models\Domain
      * @return array $sync
      */
-    protected function generateSync ($type, $domain)
+    protected function generateSync($type, $domain)
     {
-        if($this->type == $type)
+        if ($this->type == $type) {
             $handleId = $this->id;
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 $handleId = $domain
                     ->handles()
                     ->wherePivot('type', $type)
                     ->firstOrFail()->id;
 
-            } catch ( ModelNotFoundException $e)
-            {
+            } catch (ModelNotFoundException $e) {
                 throw new Exception('Handle not found');
             }
         }
@@ -198,20 +186,18 @@ class Handle extends Model {
     /**
      * Save the model to the database.
      *
-     * @param  array  $options
      * @return bool
      */
     public function save(array $options = [])
     {
         // If the model already exists in the database we need to make sure that it unique.
-        if ($this->exists && !isset($options['overrideUniqueCheck'])) {
-            if($this->isUsedByOtherDomains())
-            {
+        if ($this->exists && ! isset($options['overrideUniqueCheck'])) {
+            if ($this->isUsedByOtherDomains()) {
                 throw new HandleUsedByMultipleDomains();
             }
-        }
-        elseif(isset($options['overrideUniqueCheck']))
+        } elseif (isset($options['overrideUniqueCheck'])) {
             unset($options['overrideUniqueCheck']);
+        }
 
         $return = parent::save($options);
     }
@@ -223,6 +209,6 @@ class Handle extends Model {
      */
     public function domains()
     {
-        return $this->belongsToMany('WeDevelopCoffee\wPower\Models\Domain','wDomain_handle');
+        return $this->belongsToMany('WeDevelopCoffee\wPower\Models\Domain', 'wDomain_handle');
     }
 }

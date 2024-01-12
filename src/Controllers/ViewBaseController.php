@@ -1,10 +1,10 @@
 <?php
+
 namespace WeDevelopCoffee\wPower\Controllers;
 
 use WeDevelopCoffee\wPower\Core\Core;
 use WeDevelopCoffee\wPower\Validator\Validator;
 use WeDevelopCoffee\wPower\View\View;
-
 
 /**
  * Controller dispatcher
@@ -15,17 +15,19 @@ class ViewBaseController
      * @var Core
      */
     protected $core;
+
     /**
      * @var View
      */
     protected $view;
+
     /**
      * @var Validator
      */
     protected $validator;
 
     /**
-     * @var array $rules The rules.
+     * @var array The rules.
      */
     protected $rules;
 
@@ -46,14 +48,12 @@ class ViewBaseController
      */
     protected function validate()
     {
-        return !$this->validator->failed();
+        return ! $this->validator->failed();
     }
 
     /**
      * Generate the view.
      *
-     * @param $view
-     * @param $data
      * @return mixed
      */
     protected function view($view, $data)

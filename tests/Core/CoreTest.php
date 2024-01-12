@@ -7,15 +7,13 @@ use WeDevelopCoffee\wPower\Tests\TestCase;
 
 /**
  * Class LaunchTest
- * @package WeDevelopCoffee\wPower\Tests\Launch
  */
 class CoreTest extends TestCase
 {
     /**
-     * @var object $launch The \WeDevelopCoffee\wPower\Core\Launch::class
+     * @var object The \WeDevelopCoffee\wPower\Core\Launch::class
      */
     protected $launch;
-
 
     public function test_launch_core()
     {
@@ -31,5 +29,4 @@ class CoreTest extends TestCase
 
         $this->assertIsObject($this->launch);
     }
-
 }

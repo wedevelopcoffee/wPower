@@ -6,7 +6,6 @@ use WeDevelopCoffee\wPower\Core\Core;
 
 /**
  * Class Validator
- * @package WeDevelopCoffee\wPower\Validator
  */
 class Validator
 {
@@ -16,18 +15,14 @@ class Validator
     private $core;
 
     /**
-     * @var array $rules The rules.
+     * @var array The rules.
      */
     protected $rules;
 
-    /**
-     * @var
-     */
     protected $failedRules;
 
     /**
      * Validator constructor.
-     * @param Core $core
      */
     public function __construct(Core $core)
     {
@@ -39,35 +34,31 @@ class Validator
      */
     public function validate()
     {
-        foreach($this->rules as $field => $ruleSet)
-        {
-            $rules = explode("|", $ruleSet);
+        foreach ($this->rules as $field => $ruleSet) {
+            $rules = explode('|', $ruleSet);
 
-            foreach($rules as $rule)
-            {
+            foreach ($rules as $rule) {
                 $rule = strtolower($rule);
-                switch($rule)
-                {
-                    case "required":
-                        if(!isset($_REQUEST[$field]) || $_REQUEST[$field] == '' )
+                switch ($rule) {
+                    case 'required':
+                        if (! isset($_REQUEST[$field]) || $_REQUEST[$field] == '') {
                             $this->failedRules[$field] = true;
+                        }
+
                         continue;
                         break;
                 }
 
-                if(substr($rule, 0,10) == 'different_')
-                {
+                if (substr($rule, 0, 10) == 'different_') {
                     $otherField = substr($rule, 10);
 
-                    if(is_array($_REQUEST[$otherField]))
-                    {
-                        foreach($_REQUEST[$otherField] as $value)
-                        {
+                    if (is_array($_REQUEST[$otherField])) {
+                        foreach ($_REQUEST[$otherField] as $value) {
                             $this->checkIfValueIsSimilarToField($otherField, $value, $field);
                         }
-                    }
-                    else
+                    } else {
                         $this->checkIfValueIsSimilarToField($otherField, $value, $field);
+                    }
 
                     continue;
                 }
@@ -78,25 +69,27 @@ class Validator
     /**
      * Check if the validation has failed.
      *
-     * @return boolean
+     * @return bool
      */
     public function failed()
     {
         $this->validate();
 
-        if(empty($this->failedRules))
+        if (empty($this->failedRules)) {
             return false;
+        }
 
         return true;
     }
 
     /**
-     * @param mixed $rules
+     * @param  mixed  $rules
      * @return Validator
      */
     public function setRules($rules)
     {
         $this->rules = $rules;
+
         return $this;
     }
 
@@ -110,10 +103,10 @@ class Validator
 
     protected function checkIfValueIsSimilarToField($otherField, $otherValue, $field)
     {
-        if($otherValue == $_REQUEST[$field])
-        {
+        if ($otherValue == $_REQUEST[$field]) {
             $this->failedRules[$otherField] = true;
             $this->failedRules[$field] = true;
+
             return true;
         }
 

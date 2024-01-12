@@ -4,18 +4,19 @@ namespace WeDevelopCoffee\wPower\Email;
 
 /**
  * Class AdminEmail
- * @package WeDevelopCoffee\wPower\Email
  */
 class Email extends BaseEmail
 {
     /**
      * Related id. For general e-mails the client id. Otherwise, use the related service id (e.g. domain id for domains, service id for services).
-     * @var integer
+     *
+     * @var int
      */
     protected $id;
 
     /**
      * E-mail type
+     *
      * @var string  (‘general’, ‘product’, ‘domain’, ‘invoice’, ‘support’, ‘affiliate’)
      */
     protected $customType = 'general';
@@ -23,8 +24,7 @@ class Email extends BaseEmail
     /**
      * @var array
      */
-    protected $customVars = array();
-
+    protected $customVars = [];
 
     /**
      * Send the e-mail to the user.
@@ -32,13 +32,12 @@ class Email extends BaseEmail
     public function send()
     {
         $postData = [
-            'id' => $this->id
+            'id' => $this->id,
         ];
 
-        if($this->messageName != '')
+        if ($this->messageName != '') {
             $postData['messagename'] = $this->messageName;
-        else
-        {
+        } else {
             $postData['customtype'] = $this->customType;
             $postData['customsubject'] = $this->customSubject;
             $postData['custommessage'] = $this->customMessage;
@@ -47,39 +46,43 @@ class Email extends BaseEmail
 
         $results = $this->API->exec('SendEmail', $postData);
 
-        if($results['result'] == 'error')
+        if ($results['result'] == 'error') {
             throw new \Exception($results['message']);
+        }
 
         return 'success';
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return Email
      */
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
     /**
-     * @param string $customType
+     * @param  string  $customType
      * @return Email
      */
     public function setCustomType($customType)
     {
         $this->customType = $customType;
+
         return $this;
     }
 
     /**
-     * @param array $customVars
+     * @param  array  $customVars
      * @return Email
      */
     public function setCustomVar($key, $value)
     {
         $this->customVars[$key] = $value;
+
         return $this;
     }
 }
